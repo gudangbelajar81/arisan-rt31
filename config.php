@@ -115,4 +115,19 @@ if ($res_pin && $res_pin->num_rows > 0) {
         if ($row['kunci'] == 'pin_pertemuan') $pin_pertemuan = $row['nilai'];
     }
 }
+// 10. Buat Tabel Pembayaran Arisan (Matriks Checklist)
+$sql_bayar = "CREATE TABLE IF NOT EXISTS pembayaran_arisan (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    peserta_id INT(6) UNSIGNED NOT NULL,
+    bulan VARCHAR(50) NOT NULL,
+    waktu_bayar TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY (peserta_id, bulan)
+)";
+$conn->query($sql_bayar);
+
+// Tambahkan default kolom bulan jika belum ada
+$cek_kolom = $conn->query("SELECT nilai FROM pengaturan WHERE kunci = 'kolom_bulan'");
+if ($cek_kolom && $cek_kolom->num_rows == 0) {
+    $conn->query("INSERT INTO pengaturan (kunci, nilai) VALUES ('kolom_bulan', 'Januari,Februari,Maret')");
+}
 ?>
