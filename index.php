@@ -42,12 +42,12 @@
             
             <a href="ronda.php" class="btn" style="background: rgba(255,255,255,0.7); border: 2px solid #1e293b; color: #1e293b; display: block; text-align: center; backdrop-filter: blur(5px); margin-bottom: 15px;">🛡️ Jadwal Siskamling (Ronda)</a>
             <a href="pertemuan.php" class="btn" style="background: rgba(255,255,255,0.7); border: 2px solid #2563eb; color: #2563eb; display: block; text-align: center; backdrop-filter: blur(5px);">📅 Jadwal Pertemuan Rutin</a>
-        <div style="text-align: center; margin-top: 15px;">
-            <button id="btn-install" style="display: none; background: transparent; border: 1px solid rgba(0,0,0,0.15); color: #64748b; padding: 6px 18px; border-radius: 50px; font-weight: 400; font-size: 0.8rem; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s ease;">📱 Instal di HP</button>
+        <div style="text-align: center; margin-top: 25px;">
+            <button id="btn-install" style="display: none; background: transparent; border: 2px solid #64748b; color: #64748b; padding: 12px 30px; border-radius: 50px; font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease; width: 100%; max-width: 350px; margin: 0 auto;">📱 Instal di HP</button>
         </div>
         
-        <div style="text-align: center; margin-top: 30px;">
-            <p style="color: #94a3b8; font-weight: 400; font-size: 0.8rem; letter-spacing: 1px; margin-top: 20px; opacity: 0.7;">Sistem ini dibangun oleh Musyafa</p>
+        <div style="text-align: center; margin-top: 40px;">
+            <p style="color: #64748b; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px; margin-top: 20px;">Sistem ini dibangun oleh Musyafa</p>
         </div>
     </div>
 <script src="sound.js"></script>
