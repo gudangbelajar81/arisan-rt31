@@ -100,10 +100,15 @@ $list_bulan = array_filter(array_map('trim', explode(',', $row_kolom['nilai'])))
 
 // Ambil data pembayaran
 $pembayaran = [];
+$pembayaran_per_bulan = [];
 $res_bayar = $conn->query("SELECT peserta_id, bulan FROM pembayaran_arisan");
 if ($res_bayar) {
     while($row = $res_bayar->fetch_assoc()) {
         $pembayaran[$row['peserta_id']][$row['bulan']] = true;
+        if (!isset($pembayaran_per_bulan[$row['bulan']])) {
+            $pembayaran_per_bulan[$row['bulan']] = 0;
+        }
+        $pembayaran_per_bulan[$row['bulan']]++;
     }
 }
 ?>
@@ -305,11 +310,21 @@ if ($res_bayar) {
                             $nama_bulan_saja = $parts[0];
                             $tahun_saja = isset($parts[1]) ? $parts[1] : "";
                             
-                            echo "<th style='min-width: 80px;'>";
+                            echo "<th style='min-width: 80px; position: relative;'>";
                             echo "<div style='font-size: 0.9rem;'>" . htmlspecialchars($nama_bulan_saja) . "</div>";
                             if ($tahun_saja) {
                                 echo "<div style='font-size: 0.75rem; opacity: 0.8; font-weight: normal;'>" . htmlspecialchars($tahun_saja) . "</div>";
                             }
+                            
+                            $jumlah_bayar = isset($pembayaran_per_bulan[$bln]) ? $pembayaran_per_bulan[$bln] : 0;
+                            if ($is_admin && $jumlah_bayar == 0) {
+                                echo "<form method='POST' style='position: absolute; top: 5px; right: 5px; margin: 0;' onsubmit=\"return confirm('Yakin ingin menghapus kolom " . htmlspecialchars($bln) . "?');\">";
+                                echo "<input type='hidden' name='action' value='hapus_bulan'>";
+                                echo "<input type='hidden' name='bulan_hapus' value='" . htmlspecialchars($bln, ENT_QUOTES) . "'>";
+                                echo "<button type='submit' style='background: none; border: none; color: #dc3545; cursor: pointer; font-size: 1.1rem; padding: 0;' title='Hapus Bulan'>🗑️</button>";
+                                echo "</form>";
+                            }
+                            
                             echo "</th>";
                         }
                         ?>
