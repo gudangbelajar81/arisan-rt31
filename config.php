@@ -21,6 +21,12 @@ $pass = get_env_var("MYSQLPASSWORD", "");
 $dbname = get_env_var("MYSQLDATABASE", "arisan_rt31");
 $port = (int) get_env_var("MYSQLPORT", 3306);
 
+// Konfigurasi Keamanan Multi-PIN
+$pin_arisan = "111111"; // PIN khusus Bendahara/Admin Arisan
+$pin_ronda = "222222";  // PIN khusus Komandan Ronda
+$pin_pertemuan = "333333"; // PIN khusus Sekretaris/Tuan Rumah
+$pin_master = "123456"; // PIN Sapu Jagat (Membuka semua akses)
+
 // 1. Mencoba koneksi langsung
 $conn = @new mysqli($host, $user, $pass, $dbname, $port);
 

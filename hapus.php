@@ -4,8 +4,8 @@ require 'config.php';
 require 'logger.php';
 
 // Cek keamanan akses admin
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: login.php");
+if (!isset($_SESSION['admin_arisan']) || $_SESSION['admin_arisan'] !== true) {
+    header("Location: login.php?modul=arisan");
     exit;
 }
 

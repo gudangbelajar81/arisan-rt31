@@ -3,7 +3,7 @@ session_start();
 require 'config.php'; 
 require 'logger.php';
 
-$is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
+$is_admin = isset($_SESSION['admin_ronda']) && $_SESSION['admin_ronda'] === true;
 $pesan = "";
 
 // Tangani aksi Admin
@@ -252,9 +252,9 @@ if (isset($_GET['msg'])) {
         
         <div style="margin-top: 20px; text-align: right;">
             <?php if($is_admin): ?>
-                <a href="logout.php" style="color: #dc3545; text-decoration: none; font-weight: bold;">🔓 Logout Admin</a>
+                <a href="logout.php?modul=ronda" style="color: #dc3545; text-decoration: none; font-weight: bold;">🔓 Logout Admin</a>
             <?php else: ?>
-                <a href="login.php" style="color: #ccc; text-decoration: none; font-size: 0.8rem;">🔒 Login Admin Rahasia</a>
+                <a href="login.php?modul=ronda" style="color: #ccc; text-decoration: none; font-size: 0.8rem;">🔒 Login Admin Rahasia</a>
             <?php endif; ?>
         </div>
     </div>

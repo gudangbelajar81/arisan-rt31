@@ -1,7 +1,7 @@
 <?php 
 session_start();
 require 'config.php'; 
-$is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
+$is_admin = isset($_SESSION['admin_arisan']) && $_SESSION['admin_arisan'] === true;
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -80,9 +80,9 @@ $is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] 
         <div style="margin-top: 20px; text-align: right;">
             <?php if($is_admin): ?>
                 <a href="export.php" style="color: #217346; text-decoration: none; font-weight: bold; margin-right: 15px; border: 1px solid #217346; padding: 5px 10px; border-radius: 5px;">📊 Download Excel</a>
-                <a href="logout.php" style="color: #dc3545; text-decoration: none; font-weight: bold;">🔓 Logout Admin</a>
+                <a href="logout.php?modul=arisan" style="color: #dc3545; text-decoration: none; font-weight: bold;">🔓 Logout Admin</a>
             <?php else: ?>
-                <a href="login.php" style="color: #ccc; text-decoration: none; font-size: 0.8rem;">🔒 Login Admin Rahasia</a>
+                <a href="login.php?modul=arisan" style="color: #ccc; text-decoration: none; font-size: 0.8rem;">🔒 Login Admin Rahasia</a>
             <?php endif; ?>
         </div>
     </div>

@@ -3,8 +3,8 @@ session_start();
 require 'config.php';
 require 'logger.php';
 
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    die("Akses Ditolak! Anda bukan Admin.");
+if (!isset($_SESSION['admin_arisan']) || $_SESSION['admin_arisan'] !== true) {
+    die("Akses Ditolak! Anda bukan Admin Arisan.");
 }
 
 if (!isset($_GET['id'])) {
