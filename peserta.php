@@ -41,8 +41,8 @@ $is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] 
                     </thead>
                     <tbody>
                         <?php
-                        // Memastikan nama terurut secara otomatis sesuai abjad (A di atas)
-                        $sql = "SELECT * FROM peserta WHERE is_deleted = 0 ORDER BY nama ASC";
+                        // Hanya tampilkan peserta arisan asli (yang punya nomor WA, bukan warga selipan otomatis)
+                        $sql = "SELECT * FROM peserta WHERE is_deleted = 0 AND no_wa != '-' AND no_wa != '' ORDER BY nama ASC";
                         $result = $conn->query($sql);
                         
                         if ($result->num_rows > 0) {
@@ -68,7 +68,7 @@ $is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] 
                                 $delay += 0.08; // Baris berikutnya telat 0.08 detik
                             }
                         } else {
-                            $cols = $is_admin ? 4 : 3;
+                            $cols = $is_admin ? 5 : 4;
                             echo "<tr><td colspan='$cols' class='text-center' style='padding: 20px;'>Belum ada warga yang mendaftar. Ayo daftar duluan!</td></tr>";
                         }
                         ?>
