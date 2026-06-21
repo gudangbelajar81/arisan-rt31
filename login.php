@@ -7,7 +7,7 @@ $modul = isset($_GET['modul']) ? $_GET['modul'] : 'arisan';
 
 $title = "Admin Arisan";
 $target_pin = $pin_arisan;
-$redirect = "arisan.php";
+$redirect = "peserta.php";
 
 if ($modul === 'ronda') {
     $title = "Admin Siskamling";
@@ -17,6 +17,10 @@ if ($modul === 'ronda') {
     $title = "Admin Tuan Rumah";
     $target_pin = $pin_pertemuan;
     $redirect = "pertemuan.php";
+} elseif ($modul === 'master') {
+    $title = "Admin Master";
+    $target_pin = $pin_master;
+    $redirect = "pengaturan.php";
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
