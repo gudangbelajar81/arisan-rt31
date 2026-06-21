@@ -1,4 +1,4 @@
-const CACHE_NAME = 'arisan-rt31-cache-v2';
+const CACHE_NAME = 'arisan-rt31-cache-v3';
 const staticAssets = [
   './',
   'index.php',
