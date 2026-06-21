@@ -154,19 +154,29 @@ if ($res_bayar) {
             text-align: center;
         }
         th {
-            background: #cca300;
+            background: linear-gradient(145deg, #e6b800, #cca300);
             color: #111;
             white-space: nowrap;
             position: sticky;
             top: 0;
             z-index: 10;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
+            box-shadow: inset 1px 1px 1px rgba(255,255,255,0.6), inset -2px -2px 4px rgba(0,0,0,0.2);
+            border: 1px solid #997a00;
+        }
+        td.no-peserta {
+            position: sticky;
+            left: 0;
+            background: #fff;
+            z-index: 5;
+            font-weight: bold;
         }
         td.nama-peserta {
             text-align: left;
             font-weight: bold;
             color: #333;
             position: sticky;
-            left: 0;
+            left: 40px;
             background: #fff;
             z-index: 5;
             box-shadow: 2px 0 5px rgba(0,0,0,0.05);
@@ -187,6 +197,27 @@ if ($res_bayar) {
             color: #dc3545;
             font-size: 1.2rem;
             opacity: 0.3;
+        }
+        
+        /* Tombol 3D Kekar */
+        .btn-3d {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #2ea84b, #217346);
+            color: white;
+            border: 1px solid #1b5e20;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.05rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            box-shadow: inset 1px 1px 1px rgba(255,255,255,0.4), inset -2px -2px 5px rgba(0,0,0,0.3), 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.1s ease;
+        }
+        .btn-3d:active {
+            box-shadow: inset 2px 2px 6px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.1);
+            transform: translateY(2px);
         }
         
         .form-tambah-bulan {
@@ -247,7 +278,7 @@ if ($res_bayar) {
         <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
             <form method="POST" style="flex: 1; min-width: 250px;">
                 <input type="hidden" name="action" value="tambah_bulan_otomatis">
-                <button type="submit" style="width: 100%; height: 100%; background: #217346; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s;" onmouseover="this.style.background='#1e6b41'" onmouseout="this.style.background='#217346'">
+                <button type="submit" class="btn-3d">
                     ⏭️ Lanjut Bulan Berikutnya
                 </button>
             </form>
@@ -266,8 +297,8 @@ if ($res_bayar) {
             <table id="tabelArisan">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th style="min-width: 150px; position: sticky; left: 0; background: #cca300; z-index: 15;">Nama Warga</th>
+                        <th style="min-width: 40px; position: sticky; left: 0; background: linear-gradient(145deg, #e6b800, #cca300); z-index: 15;">No</th>
+                        <th style="min-width: 150px; position: sticky; left: 40px; background: linear-gradient(145deg, #e6b800, #cca300); z-index: 15;">Nama Warga</th>
                         <?php 
                         foreach ($list_bulan as $bln) {
                             $parts = explode(" ", trim($bln));
@@ -296,7 +327,7 @@ if ($res_bayar) {
                         while($row = $result->fetch_assoc()) {
                             $pid = $row['id'];
                             echo "<tr>";
-                            echo "<td>" . $no++ . "</td>";
+                            echo "<td class='no-peserta'>" . $no++ . "</td>";
                             echo "<td class='nama-peserta'>" . htmlspecialchars($row['nama']) . "</td>";
                             
                             foreach ($list_bulan as $bln) {

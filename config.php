@@ -81,6 +81,17 @@ $sql_log_table = "CREATE TABLE IF NOT EXISTS log_aktivitas (
     waktu TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )";
 $conn->query($sql_log_table);
+
+// Tambah Tabel Pemenang Arisan
+$sql_pemenang = "CREATE TABLE IF NOT EXISTS pemenang_arisan (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    peserta_id INT(6) UNSIGNED NOT NULL,
+    bulan_menang VARCHAR(50) NOT NULL,
+    tanggal_kocok TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (peserta_id) REFERENCES peserta(id) ON DELETE CASCADE
+)";
+$conn->query($sql_pemenang);
+
 // 7. Buat Tabel Pengaturan (Untuk PIN Dinamis)
 $sql_pengaturan = "CREATE TABLE IF NOT EXISTS pengaturan (
     kunci VARCHAR(50) PRIMARY KEY,
