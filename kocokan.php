@@ -185,6 +185,10 @@ $res_pemenang = $conn->query($sql_pemenang);
             
             <?php if($is_admin): ?>
                 <button id="btnSpin" class="btn-spin">🎲 PUTAR MESIN!</button>
+                <div id="action-buttons" style="display: none; position: relative; z-index: 2; gap: 15px; justify-content: center; margin-top: 20px;">
+                    <button id="btnSah" class="btn-spin" style="background: linear-gradient(145deg, #2ea84b, #217346); border-color: #1b5e20; padding: 15px 30px; font-size: 1.1rem;">✅ SAHKAN PEMENANG</button>
+                    <button id="btnBatal" class="btn-spin" style="background: linear-gradient(145deg, #6c757d, #495057); border-color: #343a40; padding: 15px 30px; font-size: 1.1rem;">❌ BATAL (PUTAR ULANG)</button>
+                </div>
             <?php else: ?>
                 <div style="color: #cca300; font-style: italic; position: relative; z-index: 2;">Menunggu Admin memutar mesin...</div>
             <?php endif; ?>
@@ -230,10 +234,72 @@ $res_pemenang = $conn->query($sql_pemenang);
         const kandidat = <?= $kandidat_json ?>;
         const slotDisplay = document.getElementById('slot-display');
         const btnSpin = document.getElementById('btnSpin');
+        const actionButtons = document.getElementById('action-buttons');
+        const btnSah = document.getElementById('btnSah');
+        const btnBatal = document.getElementById('btnBatal');
         const bulanSelect = document.getElementById('bulanSelect');
         const kandidatCount = document.getElementById('kandidat-count');
         
         let isSpinning = false;
+        let selectedWinner = null;
+        let audioCtx = null;
+        
+        // Inisialisasi AudioContext (harus dipanggil setelah interaksi user)
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+        }
+        
+        function playTick() {
+            if(!audioCtx) return;
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.type = 'triangle';
+            oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.1);
+        }
+        
+        function playTada() {
+            if(!audioCtx) return;
+            const freqs = [523.25, 659.25, 783.99, 1046.50]; // Akord Mayor
+            freqs.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + (i * 0.1));
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + (i * 0.1) + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + (i * 0.1) + 1.5);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(audioCtx.currentTime + (i * 0.1));
+                osc.stop(audioCtx.currentTime + (i * 0.1) + 1.5);
+            });
+        }
+        
+        function speakWinner(name) {
+            if ('speechSynthesis' in window) {
+                // Hentikan suara jika sedang bicara
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance("Selamat! Pemenang bulan ini adalah, " + name);
+                utterance.lang = 'id-ID';
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
         
         if (btnSpin) {
             btnSpin.addEventListener('click', function() {
@@ -243,62 +309,81 @@ $res_pemenang = $conn->query($sql_pemenang);
                 }
                 
                 if (isSpinning) return;
+                initAudio();
+                
                 isSpinning = true;
-                btnSpin.disabled = true;
-                btnSpin.innerText = "MENGACAK...";
+                btnSpin.style.display = 'none';
+                actionButtons.style.display = 'none';
                 slotDisplay.classList.remove('winner-mode');
                 
-                const bulanMenang = bulanSelect.value;
-                
                 // Durasi animasi
-                const duration = 4000; // 4 detik
+                const duration = 5000; // 5 detik untuk suspense
                 const startTime = Date.now();
-                let speed = 50; // kecepatan awal sangat cepat
+                let speed = 50; 
                 let timerId;
-                
-                // Audio (opsional)
-                // const audioClick = new Audio('data:audio/wav;base64,...');
                 
                 function spin() {
                     const now = Date.now();
                     const elapsed = now - startTime;
                     
-                    // Pilih nama acak untuk ditampilkan efek berkedip
                     const randomIndex = Math.floor(Math.random() * kandidat.length);
                     slotDisplay.innerText = kandidat[randomIndex].nama;
+                    playTick();
                     
-                    // Percepat perlambatan (friction)
-                    if (elapsed < duration * 0.5) {
+                    if (elapsed < duration * 0.4) {
                         speed = 50;
-                    } else if (elapsed < duration * 0.8) {
+                    } else if (elapsed < duration * 0.7) {
                         speed = 150;
-                    } else {
+                    } else if (elapsed < duration * 0.9) {
                         speed = 300;
+                    } else {
+                        speed = 500;
                     }
                     
                     if (elapsed < duration) {
                         timerId = setTimeout(spin, speed);
                     } else {
-                        // BERHENTI! Tentukan Pemenang Sebenarnya
+                        // BERHENTI!
                         const winnerIndex = Math.floor(Math.random() * kandidat.length);
-                        const winner = kandidat[winnerIndex];
+                        selectedWinner = kandidat[winnerIndex];
+                        selectedWinner.index = winnerIndex;
                         
-                        slotDisplay.innerText = winner.nama;
+                        slotDisplay.innerText = selectedWinner.nama;
                         slotDisplay.classList.add('winner-mode');
-                        btnSpin.innerText = "🎲 PUTAR MESIN!";
-                        btnSpin.disabled = false;
+                        
+                        playTada();
+                        setTimeout(() => speakWinner(selectedWinner.nama), 500);
+                        
+                        // Tampilkan tombol konfirmasi
+                        actionButtons.style.display = 'flex';
                         isSpinning = false;
-                        
-                        // Kirim ke server
-                        simpanPemenang(winner.id, bulanMenang);
-                        
-                        // Hapus dari array kandidat agar tidak ganda di sesi ini
-                        kandidat.splice(winnerIndex, 1);
-                        kandidatCount.innerText = kandidat.length;
                     }
                 }
                 
                 spin();
+            });
+            
+            // Tombol Sahkan
+            btnSah.addEventListener('click', function() {
+                if(!selectedWinner) return;
+                
+                btnSah.innerText = "MENYIMPAN...";
+                btnSah.disabled = true;
+                btnBatal.disabled = true;
+                
+                const bulanMenang = bulanSelect.value;
+                simpanPemenang(selectedWinner.id, bulanMenang);
+            });
+            
+            // Tombol Batal
+            btnBatal.addEventListener('click', function() {
+                actionButtons.style.display = 'none';
+                btnSpin.style.display = 'inline-block';
+                btnSpin.innerText = "🎲 PUTAR ULANG!";
+                slotDisplay.classList.remove('winner-mode');
+                slotDisplay.innerText = "???";
+                selectedWinner = null;
+                window.speechSynthesis.cancel();
             });
         }
         
@@ -314,12 +399,12 @@ $res_pemenang = $conn->query($sql_pemenang);
             .then(res => res.json())
             .then(data => {
                 if(data.status === 'success') {
-                    // Reload halaman setelah 3 detik untuk memperbarui tabel
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 3000);
+                    window.location.reload();
                 } else {
                     alert("Error: " + data.message);
+                    btnSah.innerText = "✅ SAHKAN PEMENANG";
+                    btnSah.disabled = false;
+                    btnBatal.disabled = false;
                 }
             })
             .catch(err => alert("Terjadi kesalahan koneksi."));
