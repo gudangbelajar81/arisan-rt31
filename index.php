@@ -27,21 +27,32 @@
             require 'config.php';
             $is_master = isset($_SESSION['admin_master']) && $_SESSION['admin_master'] === true;
             ?>
-            <a href="daftar.php" class="btn btn-primary btn-cta-pulse"><span style="position: relative; z-index: 2;">📝 Daftar Arisan Sekarang</span></a>
-            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-                <a href="peserta.php" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(145deg, #2ea84b, #217346); color: white; padding: 20px 10px; border-radius: 12px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 0 #1b5e20, 0 8px 15px rgba(33, 115, 70, 0.4); transition: transform 0.1s, box-shadow 0.1s;">
-                    <span style="font-size: 2rem; margin-bottom: 5px;">👥</span>
-                    <span style="font-size: 1.1rem; line-height: 1.2;">Buku Kas<br>Arisan</span>
+            <a href="daftar.php" class="btn-glass-primary">
+                <span style="font-size: 1.8rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">📝</span>
+                <span>Daftar Arisan Sekarang</span>
+            </a>
+            
+            <div class="glass-grid">
+                <a href="peserta.php" class="btn-glass">
+                    <span class="icon">👥</span>
+                    <span class="text">Buku Kas<br>Arisan</span>
                 </a>
                 
-                <a href="kocokan.php" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(145deg, #e6b800, #cca300); color: #111; padding: 20px 10px; border-radius: 12px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 0 #997a00, 0 8px 15px rgba(204, 163, 0, 0.4); transition: transform 0.1s, box-shadow 0.1s;">
-                    <span style="font-size: 2rem; margin-bottom: 5px;">🎰</span>
-                    <span style="font-size: 1.1rem; line-height: 1.2;">Mesin<br>Kocokan</span>
+                <a href="kocokan.php" class="btn-glass">
+                    <span class="icon">🎰</span>
+                    <span class="text">Mesin<br>Kocokan</span>
+                </a>
+                
+                <a href="ronda.php" class="btn-glass">
+                    <span class="icon">🛡️</span>
+                    <span class="text">Jadwal<br>Siskamling</span>
+                </a>
+                
+                <a href="pertemuan.php" class="btn-glass">
+                    <span class="icon">📅</span>
+                    <span class="text">Jadwal<br>Pertemuan</span>
                 </a>
             </div>
-            
-            <a href="ronda.php" class="btn" style="background: rgba(255,255,255,0.7); border: 2px solid #1e293b; color: #1e293b; display: block; text-align: center; backdrop-filter: blur(5px); margin-bottom: 15px;">🛡️ Jadwal Siskamling (Ronda)</a>
-            <a href="pertemuan.php" class="btn" style="background: rgba(255,255,255,0.7); border: 2px solid #2563eb; color: #2563eb; display: block; text-align: center; backdrop-filter: blur(5px);">📅 Jadwal Pertemuan Rutin</a>
         <div style="text-align: center; margin-top: 25px;">
             <button id="btn-install" style="display: none; background: transparent; border: 2px solid #64748b; color: #64748b; padding: 12px 30px; border-radius: 50px; font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease; width: 100%; max-width: 350px; margin: 0 auto;">📱 Instal di HP</button>
         </div>

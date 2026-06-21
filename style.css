@@ -672,3 +672,12 @@ body.idle-active.mode-b-active .container {
 .menu-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
 .menu-btn h3 { margin: 0 0 5px 0; color: #111; font-size: 1.2rem; }
 .menu-btn p { margin: 0; color: #666; font-size: 0.9rem; }
+
+/* GANTENG MAKSIMAL GLASSMORPHISM UI */
+.glass-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+.btn-glass { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.4); color: #fff; padding: 25px 15px; border-radius: 20px; text-decoration: none; font-weight: 800; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+.btn-glass:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.35); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.8); }
+.btn-glass .icon { font-size: 2.5rem; margin-bottom: 10px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
+.btn-glass .text { font-size: 1.15rem; line-height: 1.3; }
+.btn-glass-primary { background: rgba(255, 255, 255, 0.95); color: #1e293b; text-shadow: none; border: none; padding: 20px; border-radius: 20px; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 15px; font-weight: 800; text-decoration: none; box-shadow: 0 10px 25px rgba(0,0,0,0.15); transition: all 0.3s ease; width: 100%; }
+.btn-glass-primary:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.25); background: #fff; }
