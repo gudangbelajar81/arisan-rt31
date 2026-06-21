@@ -59,12 +59,19 @@ if ($check_column && $check_column->num_rows == 0) {
     $conn->query("ALTER TABLE peserta ADD COLUMN is_deleted TINYINT(1) DEFAULT 0 AFTER blok_rumah");
 }
 
-$check_ronda = $conn->query("SHOW COLUMNS FROM peserta LIKE 'hari_ronda'");
-if ($check_ronda && $check_ronda->num_rows == 0) {
-    $conn->query("ALTER TABLE peserta ADD COLUMN hari_ronda VARCHAR(20) NULL AFTER is_deleted");
+// 4. Tambah Kolom Hari Ronda jika belum ada
+$sql_alter = "ALTER TABLE peserta ADD COLUMN hari_ronda VARCHAR(20) NULL";
+if ($conn->query($sql_alter) === FALSE) {
+    // Abaikan jika sudah ada
 }
 
-// 4. Buat Tabel Log Aktivitas (Jejak Rekam Digital)
+// 5. Tambah Kolom Bulan Pertemuan (Arisan) jika belum ada
+$sql_alter_bulan = "ALTER TABLE peserta ADD COLUMN bulan_pertemuan VARCHAR(20) NULL";
+if ($conn->query($sql_alter_bulan) === FALSE) {
+    // Abaikan jika sudah ada
+}
+
+// 6. Buat Tabel Log Aktivitas (Jejak Rekam Digital)
 $sql_log_table = "CREATE TABLE IF NOT EXISTS log_aktivitas (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     aksi VARCHAR(255) NOT NULL,
