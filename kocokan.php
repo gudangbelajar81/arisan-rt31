@@ -33,13 +33,15 @@ $res_pemenang = $conn->query($sql_pemenang);
     <link rel="stylesheet" href="style.css">
     <style>
         .arena-kocokan {
-            background: linear-gradient(135deg, #111, #222);
-            border: 5px solid #cca300;
-            border-radius: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
             padding: 40px 20px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(204, 163, 0, 0.2), inset 0 0 50px rgba(0,0,0,0.8);
+            box-shadow: var(--shadow-soft);
             position: relative;
             overflow: hidden;
         }
@@ -47,14 +49,14 @@ $res_pemenang = $conn->query($sql_pemenang);
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle, rgba(204,163,0,0.1) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(0,240,255,0.2) 0%, rgba(0,0,0,0) 70%);
             z-index: 1;
         }
         
         #slot-display {
             font-size: 3.5rem;
             font-weight: 900;
-            color: #cca300;
+            color: var(--primary-color);
             text-transform: uppercase;
             letter-spacing: 2px;
             margin: 20px 0;
@@ -62,7 +64,7 @@ $res_pemenang = $conn->query($sql_pemenang);
             display: flex;
             align-items: center;
             justify-content: center;
-            text-shadow: 0 0 10px rgba(204, 163, 0, 0.5), 0 0 20px rgba(204, 163, 0, 0.3);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.3);
             position: relative;
             z-index: 2;
             transition: all 0.1s;
@@ -70,7 +72,7 @@ $res_pemenang = $conn->query($sql_pemenang);
         
         .winner-mode {
             color: #fff !important;
-            text-shadow: 0 0 20px #cca300, 0 0 40px #cca300, 0 0 60px #e6b800 !important;
+            text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 0 60px var(--primary-dark) !important;
             transform: scale(1.1);
             animation: pulse 1s infinite alternate;
         }
@@ -81,9 +83,9 @@ $res_pemenang = $conn->query($sql_pemenang);
         }
         
         .btn-spin {
-            background: linear-gradient(145deg, #dc3545, #a71d2a);
+            background: linear-gradient(145deg, var(--primary-dark), var(--primary-color));
             color: white;
-            border: 2px solid #ff4d4d;
+            border: none;
             padding: 20px 50px;
             font-size: 1.5rem;
             font-weight: 900;
@@ -91,51 +93,57 @@ $res_pemenang = $conn->query($sql_pemenang);
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 2px;
-            box-shadow: 0 10px 20px rgba(220, 53, 69, 0.4), inset 0 5px 10px rgba(255,255,255,0.2);
+            box-shadow: 0 10px 20px rgba(0, 85, 255, 0.4), inset 0 5px 10px rgba(255,255,255,0.2);
             transition: all 0.2s;
             position: relative;
             z-index: 2;
         }
         .btn-spin:active {
             transform: translateY(5px);
-            box-shadow: 0 5px 10px rgba(220, 53, 69, 0.4), inset 0 5px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 10px rgba(0, 85, 255, 0.4), inset 0 5px 10px rgba(0,0,0,0.5);
         }
         .btn-spin:disabled {
-            background: #555;
-            border-color: #444;
-            color: #888;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
             cursor: not-allowed;
             box-shadow: none;
             transform: none;
         }
         
         .control-panel {
-            background: rgba(255,255,255,0.9);
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 16px;
             margin-bottom: 20px;
             display: flex;
             gap: 15px;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-left: 5px solid #cca300;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--glass-border);
         }
         .control-panel select {
             padding: 12px;
             font-size: 1.1rem;
-            border: 2px solid #cca300;
+            border: 1px solid var(--glass-border);
             border-radius: 8px;
             outline: none;
             min-width: 200px;
+            background: rgba(255,255,255,0.5);
+        }
+        .control-panel select:focus {
+            border-color: var(--primary-color);
         }
         
         .hall-of-fame {
-            background: white;
-            border-radius: 10px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--glass-border);
         }
         .hall-of-fame table {
             width: 100%;
@@ -145,12 +153,13 @@ $res_pemenang = $conn->query($sql_pemenang);
         .hall-of-fame th, .hall-of-fame td {
             padding: 15px;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
         .hall-of-fame th {
-            background: linear-gradient(145deg, #e6b800, #cca300);
-            color: #111;
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--primary-dark);
             font-weight: bold;
+            border-radius: 8px;
         }
         .medal-icon {
             font-size: 1.5rem;
@@ -162,9 +171,9 @@ $res_pemenang = $conn->query($sql_pemenang);
     <div class="container" style="max-width: 800px;">
         <a href="index.php" class="back-link">🔙 Kembali ke Menu Awal</a>
         
-        <div class="card" style="text-align: center; border-top: 3px solid #cca300; margin-bottom: 20px; padding: 15px;">
+        <div class="card" style="text-align: center; border-top: 4px solid var(--primary-dark); margin-bottom: 20px; padding: 20px;">
             <h1 style="color: var(--primary-dark); font-size: 2rem; margin:0;">🎰 Mesin Kocokan Arisan</h1>
-            <p style="color: #666; margin-top: 5px;">Sistem pengacak digital pintar (Sistem Gugur Otomatis).</p>
+            <p style="color: var(--text-main); opacity: 0.8; margin-top: 5px;">Sistem pengacak digital pintar (Sistem Gugur Otomatis).</p>
         </div>
         
         <?php if($is_admin): ?>
@@ -195,10 +204,10 @@ $res_pemenang = $conn->query($sql_pemenang);
         </div>
         
         <div class="hall-of-fame">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #cca300; padding-bottom: 10px; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                 <h2 style="color: var(--primary-dark); margin:0;">🏆 Papan Pemenang (Hall of Fame)</h2>
                 <?php if($is_admin): ?>
-                    <a href="export.php?jenis=pemenang" style="background: #0284c7; color: white; text-decoration: none; font-weight: bold; padding: 6px 12px; border-radius: 5px; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block;">🏆 Download Excel Pemenang</a>
+                    <a href="export.php?jenis=pemenang" style="background: linear-gradient(135deg, var(--primary-dark), var(--primary-color)); color: white; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 12px; font-size: 0.9rem; box-shadow: 0 8px 20px rgba(0, 85, 255, 0.3); display: inline-block;">🏆 Download Excel Pemenang</a>
                 <?php endif; ?>
             </div>
             <table id="tabelPemenang">

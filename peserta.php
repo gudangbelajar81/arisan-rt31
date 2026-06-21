@@ -141,22 +141,27 @@ if ($res_bayar) {
         .search-box {
             width: 100%;
             padding: 12px 15px;
-            border-radius: 8px;
-            border: 2px solid #cca300;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
             font-size: 1rem;
             margin-bottom: 20px;
-            background: rgba(255,255,255,0.9);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
             outline: none;
+            color: var(--text-main);
         }
         .search-box:focus {
-            box-shadow: 0 4px 15px rgba(204, 163, 0, 0.3);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
         }
         .table-responsive {
             overflow-x: auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--glass-border);
         }
         table {
             width: 100%;
@@ -165,34 +170,34 @@ if ($res_bayar) {
         }
         th, td {
             padding: 12px 15px;
-            border: 1px solid #eee;
+            border: 1px solid rgba(0,0,0,0.05);
             text-align: center;
         }
         th {
-            background: linear-gradient(145deg, #e6b800, #cca300);
-            color: #111;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            color: var(--primary-dark);
             white-space: nowrap;
             position: sticky;
             top: 0;
             z-index: 10;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
-            box-shadow: inset 1px 1px 1px rgba(255,255,255,0.6), inset -2px -2px 4px rgba(0,0,0,0.2);
-            border: 1px solid #997a00;
         }
         td.no-peserta {
             position: sticky;
             left: 0;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
             z-index: 5;
             font-weight: bold;
         }
         td.nama-peserta {
             text-align: left;
             font-weight: bold;
-            color: #333;
+            color: var(--text-main);
             position: sticky;
             left: 40px;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
             z-index: 5;
             box-shadow: 2px 0 5px rgba(0,0,0,0.05);
         }
@@ -202,36 +207,36 @@ if ($res_bayar) {
             width: 20px;
             height: 20px;
             cursor: pointer;
-            accent-color: #217346;
+            accent-color: var(--primary-dark);
         }
         .badge-lunas {
-            color: #217346;
+            color: #10b981;
             font-size: 1.2rem;
+            filter: drop-shadow(0 2px 4px rgba(16,185,129,0.3));
         }
         .badge-belum {
-            color: #dc3545;
+            color: #ef4444;
             font-size: 1.2rem;
-            opacity: 0.3;
+            opacity: 0.5;
         }
         
         /* Tombol 3D Kekar */
         .btn-3d {
             width: 100%;
             height: 100%;
-            background: linear-gradient(145deg, #2ea84b, #217346);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
             color: white;
-            border: 1px solid #1b5e20;
+            border: none;
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: bold;
             cursor: pointer;
             font-size: 1.05rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            box-shadow: inset 1px 1px 1px rgba(255,255,255,0.4), inset -2px -2px 5px rgba(0,0,0,0.3), 0 4px 6px rgba(0,0,0,0.1);
-            transition: all 0.1s ease;
+            box-shadow: 0 8px 20px rgba(0, 85, 255, 0.3);
+            transition: all 0.3s ease;
         }
-        .btn-3d:active {
-            box-shadow: inset 2px 2px 6px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.1);
+        .btn-3d:active, .btn-3d:hover {
+            box-shadow: 0 4px 10px rgba(0, 85, 255, 0.2);
             transform: translateY(2px);
         }
         
@@ -239,25 +244,35 @@ if ($res_bayar) {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
-            background: rgba(204, 163, 0, 0.1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
             padding: 15px;
-            border-radius: 8px;
-            border: 1px dashed #cca300;
+            border-radius: 12px;
+            border: 1px dashed var(--glass-border);
         }
         .form-tambah-bulan input {
             flex: 1;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.5);
+            outline: none;
+        }
+        .form-tambah-bulan input:focus {
+            border-color: var(--primary-color);
         }
         .form-tambah-bulan button {
-            background: #111;
-            color: #cca300;
+            background: var(--text-main);
+            color: white;
             border: none;
-            padding: 0 15px;
-            border-radius: 6px;
+            padding: 0 20px;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.3s;
+        }
+        .form-tambah-bulan button:hover {
+            background: var(--primary-dark);
         }
         
         /* Toast Notification */
@@ -284,7 +299,7 @@ if ($res_bayar) {
 <body>
     <div class="container" style="max-width: 1200px;">
         <a href="index.php" class="back-link">🔙 Kembali ke Menu Awal</a>
-        <div class="card" style="border-top: 3px solid #cca300; margin-bottom: 15px; padding: 15px;">
+        <div class="card" style="border-top: 4px solid var(--primary-dark); margin-bottom: 15px; padding: 20px;">
             <h2 style="color: var(--primary-dark); margin-bottom: 2px; font-size: 1.2rem;">💰 Buku Kas Arisan RT 31</h2>
             <p style="color: #666; font-size: 0.85rem; margin: 0;">Tarif: Rp 20.000 / Bulan.</p>
         </div>
@@ -312,8 +327,8 @@ if ($res_bayar) {
             <table id="tabelArisan">
                 <thead>
                     <tr>
-                        <th style="min-width: 40px; position: sticky; left: 0; background: linear-gradient(145deg, #e6b800, #cca300); z-index: 15;">No</th>
-                        <th style="min-width: 150px; position: sticky; left: 40px; background: linear-gradient(145deg, #e6b800, #cca300); z-index: 15;">Nama Warga</th>
+                        <th style="min-width: 40px; position: sticky; left: 0; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); z-index: 15;">No</th>
+                        <th style="min-width: 150px; position: sticky; left: 40px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); z-index: 15;">Nama Warga</th>
                         <?php 
                         foreach ($list_bulan as $bln) {
                             $parts = explode(" ", trim($bln));
@@ -399,8 +414,8 @@ if ($res_bayar) {
         <div style="margin-top: 20px; text-align: right;">
             <?php if($is_admin): ?>
                 <div style="margin-bottom: 10px;">
-                    <a href="export.php?jenis=buku_kas" style="color: #217346; text-decoration: none; font-weight: bold; margin-right: 15px; border: 1px solid #217346; padding: 5px 10px; border-radius: 5px; display: inline-block; margin-bottom: 5px;">📊 Download Buku Kas</a>
-                    <a href="logout.php?modul=arisan" style="color: #dc3545; text-decoration: none; font-weight: bold; padding: 5px 10px; display: inline-block; margin-bottom: 5px;">🚪 Logout Admin</a>
+                    <a href="export.php?jenis=buku_kas" style="color: var(--primary-dark); text-decoration: none; font-weight: bold; margin-right: 15px; border: 2px solid var(--primary-dark); padding: 8px 15px; border-radius: 12px; display: inline-block; margin-bottom: 5px; background: var(--glass-bg); backdrop-filter: blur(10px);">📊 Download Buku Kas</a>
+                    <a href="logout.php?modul=arisan" style="color: #ef4444; text-decoration: none; font-weight: bold; padding: 8px 15px; display: inline-block; margin-bottom: 5px; background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 12px; border: 2px solid rgba(239, 68, 68, 0.2);">🚪 Logout Admin</a>
                 </div>
             <?php else: ?>
                 <a href="login.php?modul=arisan" style="color: #ccc; text-decoration: none; font-size: 0.8rem;">🔒 Login Admin Rahasia</a>

@@ -78,24 +78,30 @@ if (isset($_GET['msg'])) {
             margin-top: 20px;
         }
         .card-ronda {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 20px;
             padding: 20px;
             box-shadow: var(--shadow-soft);
-            border-top: 5px solid #cca300;
+            border-top: 4px solid var(--primary-dark);
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
+            border-left: 1px solid var(--glass-border);
+            border-right: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
         }
         .card-ronda:hover {
             transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 85, 255, 0.2);
         }
         .hari-title {
             font-size: 1.2rem;
             font-weight: bold;
             color: var(--primary-dark);
             margin-bottom: 15px;
-            border-bottom: 2px solid #eee;
+            border-bottom: 2px solid rgba(0,0,0,0.05);
             padding-bottom: 10px;
             display: flex;
             justify-content: space-between;
@@ -103,9 +109,9 @@ if (isset($_GET['msg'])) {
         }
         .person-item {
             padding: 10px 0;
-            border-bottom: 1px dashed #eee;
+            border-bottom: 1px dashed rgba(0,0,0,0.05);
             font-size: 0.95rem;
-            color: #333;
+            color: var(--text-main);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -114,11 +120,12 @@ if (isset($_GET['msg'])) {
             border-bottom: none;
         }
         .badge-count {
-            background: #1e293b;
-            color: #cca300;
+            background: var(--primary-color);
+            color: var(--text-main);
             font-size: 0.75rem;
             padding: 4px 10px;
             border-radius: 12px;
+            font-weight: bold;
         }
         .btn-hapus {
             color: #ef4444;
@@ -136,7 +143,7 @@ if (isset($_GET['msg'])) {
         .form-add {
             margin-top: auto;
             padding-top: 15px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid rgba(0,0,0,0.05);
             display: flex;
             gap: 5px;
         }
@@ -144,18 +151,18 @@ if (isset($_GET['msg'])) {
             flex: 1;
             padding: 8px 12px;
             border-radius: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--glass-border);
             font-size: 0.9rem;
-            background: rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.5);
             outline: none;
             transition: border 0.3s;
         }
         .form-add input[type="text"]:focus {
-            border: 1px solid #cca300;
+            border: 1px solid var(--primary-color);
         }
         .form-add button {
-            background: #1e293b;
-            color: #cca300;
+            background: var(--primary-dark);
+            color: white;
             border: none;
             border-radius: 8px;
             padding: 0 12px;
@@ -164,7 +171,8 @@ if (isset($_GET['msg'])) {
             transition: background 0.2s;
         }
         .form-add button:hover {
-            background: #0f172a;
+            background: var(--primary-color);
+            color: var(--text-main);
         }
     </style>
 </head>
@@ -173,10 +181,10 @@ if (isset($_GET['msg'])) {
         <a href="index.php" class="back-link">🔙 Kembali ke Menu Awal</a>
         <div class="card" style="margin-bottom: 20px;">
             <h2 style="color: var(--primary-dark); margin-bottom: 5px;"><span class="shine-text">🛡️ Dasbor Siskamling</span></h2>
-            <p style="color: #666;">Daftar piket keamanan lingkungan RT 31 dari hari Senin hingga Minggu.</p>
+            <p style="color: var(--text-main); opacity: 0.8;">Daftar piket keamanan lingkungan RT 31 dari hari Senin hingga Minggu.</p>
             <?php if($is_admin): ?>
                 <div style="margin-top: 15px;">
-                    <a href="export.php?jenis=ronda" style="background: #10b981; color: white; text-decoration: none; font-weight: bold; padding: 6px 12px; border-radius: 5px; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block;">🛡️ Download Excel Ronda</a>
+                    <a href="export.php?jenis=ronda" style="background: linear-gradient(135deg, var(--primary-dark), var(--primary-color)); color: white; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 12px; font-size: 0.9rem; box-shadow: 0 8px 20px rgba(0, 85, 255, 0.3); display: inline-block;">🛡️ Download Excel Ronda</a>
                 </div>
             <?php endif; ?>
             <?php if ($is_admin) echo "<p style='color: #ef4444; font-size: 0.85rem; font-weight: bold; margin-top: 5px;'>🔓 Mode Admin Aktif: Anda dapat menambah atau menghapus petugas.</p>"; ?>

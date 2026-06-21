@@ -77,25 +77,30 @@ if (isset($_GET['msg'])) {
             margin-top: 20px;
         }
         .card-pertemuan {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
-            border-top: 5px solid #2563eb;
+            box-shadow: var(--shadow-soft);
+            border-top: 4px solid var(--primary-dark);
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
+            border-left: 1px solid var(--glass-border);
+            border-right: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
         }
         .card-pertemuan:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 85, 255, 0.2);
         }
         .bulan-title {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #1e3a8a;
+            color: var(--primary-dark);
             margin-bottom: 15px;
-            border-bottom: 2px solid #e0e7ff;
+            border-bottom: 2px solid rgba(0,0,0,0.05);
             padding-bottom: 10px;
             display: flex;
             justify-content: space-between;
@@ -103,9 +108,9 @@ if (isset($_GET['msg'])) {
         }
         .person-item {
             padding: 10px 0;
-            border-bottom: 1px dashed #e0e7ff;
+            border-bottom: 1px dashed rgba(0,0,0,0.05);
             font-size: 0.95rem;
-            color: #333;
+            color: var(--text-main);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -114,8 +119,8 @@ if (isset($_GET['msg'])) {
             border-bottom: none;
         }
         .badge-count {
-            background: #dbeafe;
-            color: #1d4ed8;
+            background: var(--primary-color);
+            color: var(--text-main);
             font-size: 0.75rem;
             padding: 4px 10px;
             border-radius: 12px;
@@ -137,7 +142,7 @@ if (isset($_GET['msg'])) {
         .form-add {
             margin-top: auto;
             padding-top: 15px;
-            border-top: 1px solid #e0e7ff;
+            border-top: 1px solid rgba(0,0,0,0.05);
             display: flex;
             gap: 5px;
         }
@@ -145,17 +150,17 @@ if (isset($_GET['msg'])) {
             flex: 1;
             padding: 8px 12px;
             border-radius: 8px;
-            border: 1px solid #93c5fd;
+            border: 1px solid var(--glass-border);
             font-size: 0.9rem;
-            background: rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.5);
             outline: none;
             transition: border 0.3s;
         }
         .form-add input[type="text"]:focus {
-            border: 1px solid #2563eb;
+            border: 1px solid var(--primary-color);
         }
         .form-add button {
-            background: #2563eb;
+            background: var(--primary-dark);
             color: white;
             border: none;
             border-radius: 8px;
@@ -165,19 +170,20 @@ if (isset($_GET['msg'])) {
             transition: background 0.2s;
         }
         .form-add button:hover {
-            background: #1d4ed8;
+            background: var(--primary-color);
+            color: var(--text-main);
         }
     </style>
 </head>
 <body>
     <div class="container" style="max-width: 1000px;">
-        <a href="index.php" class="back-link" style="color: #2563eb;">🔙 Kembali ke Menu Awal</a>
-        <div class="card" style="margin-bottom: 20px; border-left: 5px solid #2563eb;">
-            <h2 style="color: #1e3a8a; margin-bottom: 5px;">📅 Jadwal Tuan Rumah Pertemuan</h2>
-            <p style="color: #666;">Daftar petugas / tuan rumah arisan RT 31 dari Januari hingga Desember.</p>
+        <a href="index.php" class="back-link">🔙 Kembali ke Menu Awal</a>
+        <div class="card" style="margin-bottom: 20px;">
+            <h2 style="color: var(--primary-dark); margin-bottom: 5px;">📅 Jadwal Tuan Rumah Pertemuan</h2>
+            <p style="color: var(--text-main); opacity: 0.8;">Daftar petugas / tuan rumah arisan RT 31 dari Januari hingga Desember.</p>
             <?php if($is_admin): ?>
                 <div style="margin-top: 15px;">
-                    <a href="export.php?jenis=pertemuan" style="background: #2563eb; color: white; text-decoration: none; font-weight: bold; padding: 6px 12px; border-radius: 5px; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block;">📅 Download Excel Pertemuan</a>
+                    <a href="export.php?jenis=pertemuan" style="background: linear-gradient(135deg, var(--primary-dark), var(--primary-color)); color: white; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 12px; font-size: 0.9rem; box-shadow: 0 8px 20px rgba(0, 85, 255, 0.3); display: inline-block;">📅 Download Excel Pertemuan</a>
                 </div>
             <?php endif; ?>
             <?php if ($is_admin) echo "<p style='color: #ef4444; font-size: 0.85rem; font-weight: bold; margin-top: 5px;'>🔓 Mode Admin: Anda dapat menambah atau menghapus petugas bulanan.</p>"; ?>
