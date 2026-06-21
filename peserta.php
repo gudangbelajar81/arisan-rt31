@@ -32,6 +32,7 @@ $is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] 
                         <tr>
                             <th>No</th>
                             <th>Nama Lengkap</th>
+                            <th>Piket Ronda</th>
                             <th>Waktu Daftar</th>
                             <?php if($is_admin): ?>
                             <th>Aksi Admin</th>
@@ -52,6 +53,10 @@ $is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] 
                                 echo "<tr class='animated-row' style='animation-delay: {$delay}s;'>";
                                 echo "<td>" . $no++ . "</td>";
                                 echo "<td><strong>" . htmlspecialchars($row['nama']) . "</strong><br><small style='color: #888;'>WA: " . htmlspecialchars($row['no_wa']) . "</small></td>";
+                                
+                                $ronda_badge = !empty($row['hari_ronda']) ? "<span style='background:#cca300; color:#111; padding:3px 10px; border-radius:15px; font-size:0.8rem; font-weight:bold;'>".htmlspecialchars($row['hari_ronda'])."</span>" : "<span style='color:#ccc; font-size:0.8rem;'>-</span>";
+                                echo "<td>$ronda_badge</td>";
+                                
                                 echo "<td>" . date('d M Y', strtotime($row['tanggal_daftar'])) . "</td>";
                                 if ($is_admin) {
                                     echo "<td>

@@ -23,7 +23,8 @@
         
         <div class="menu-box">
             <a href="daftar.php" class="btn btn-primary btn-cta-pulse"><span style="position: relative; z-index: 2;">📝 Daftar Arisan Sekarang</span></a>
-            <a href="peserta.php" class="btn btn-secondary">👥 Lihat Siapa Saja yang Sudah Daftar</a>
+            <a href="peserta.php" class="btn btn-secondary" style="margin-bottom: 15px;">👥 Lihat Siapa Saja yang Sudah Daftar</a>
+            <a href="ronda.php" class="btn" style="background: rgba(255,255,255,0.7); border: 2px solid #1e293b; color: #1e293b; display: block; text-align: center; backdrop-filter: blur(5px);">🛡️ Jadwal Siskamling (Ronda)</a>
         <div style="text-align: center; margin-top: 15px;">
             <button id="btn-install" style="display: none; background: transparent; border: 1px solid rgba(0,0,0,0.15); color: #64748b; padding: 6px 18px; border-radius: 50px; font-weight: 400; font-size: 0.8rem; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s ease;">📱 Instal di HP</button>
         </div>

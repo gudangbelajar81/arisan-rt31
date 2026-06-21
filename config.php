@@ -53,10 +53,15 @@ if (!$conn->query($sql_create_table)) {
     // Abaikan gagal pembuatan tabel agar tidak memecah layout jika koneksi db aman tapi privilese kurang
 }
 
-// 3. Migrasi Database Aman (Soft-Delete)
+// 3. Migrasi Database Aman (Soft-Delete & Jadwal Ronda)
 $check_column = $conn->query("SHOW COLUMNS FROM peserta LIKE 'is_deleted'");
 if ($check_column && $check_column->num_rows == 0) {
     $conn->query("ALTER TABLE peserta ADD COLUMN is_deleted TINYINT(1) DEFAULT 0 AFTER blok_rumah");
+}
+
+$check_ronda = $conn->query("SHOW COLUMNS FROM peserta LIKE 'hari_ronda'");
+if ($check_ronda && $check_ronda->num_rows == 0) {
+    $conn->query("ALTER TABLE peserta ADD COLUMN hari_ronda VARCHAR(20) NULL AFTER is_deleted");
 }
 
 // 4. Buat Tabel Log Aktivitas (Jejak Rekam Digital)

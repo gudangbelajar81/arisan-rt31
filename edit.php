@@ -18,9 +18,10 @@ $pesan = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = ucwords(strtolower(trim($_POST['nama'])));
     $no_wa = $_POST['no_wa'];
+    $hari_ronda = !empty($_POST['hari_ronda']) ? $_POST['hari_ronda'] : NULL;
     
-    $stmt = $conn->prepare("UPDATE peserta SET nama=?, no_wa=? WHERE id=?");
-    $stmt->bind_param("ssi", $nama, $no_wa, $id);
+    $stmt = $conn->prepare("UPDATE peserta SET nama=?, no_wa=?, hari_ronda=? WHERE id=?");
+    $stmt->bind_param("sssi", $nama, $no_wa, $hari_ronda, $id);
     
     if ($stmt->execute()) {
         catat_log($conn, "Admin mengedit profil peserta ID: $id ($nama)");
@@ -67,6 +68,19 @@ if (!$data) {
                 <div class="form-group">
                     <label>Nomor WhatsApp:</label>
                     <input type="number" name="no_wa" value="<?php echo htmlspecialchars($data['no_wa']); ?>" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 25px;">
+                    <label>Piket Ronda Malam:</label>
+                    <select name="hari_ronda" style="width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; margin-top: 5px; background: rgba(255,255,255,0.8);">
+                        <option value="">-- Belum Ada Jadwal --</option>
+                        <?php 
+                        $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+                        foreach($hari as $h) {
+                            $selected = (isset($data['hari_ronda']) && $data['hari_ronda'] == $h) ? "selected" : "";
+                            echo "<option value='$h' $selected>$h</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Simpan Perubahan</button>
             </form>
