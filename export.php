@@ -129,7 +129,7 @@ if ($jenis == 'pemenang') {
     fputs($file, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
 
     // Buat Header Dinamis
-    $header = array("ID", "Nama Lengkap", "Nomor WhatsApp", "Piket Ronda");
+    $header = array("ID", "Nama Lengkap", "Nomor WhatsApp");
     foreach ($list_bulan as $bln) {
         $header[] = "Bln: " . $bln;
     }
@@ -137,7 +137,7 @@ if ($jenis == 'pemenang') {
     fputcsv($file, $header);
 
     // Ambil data warga
-    $query = "SELECT id, nama, no_wa, hari_ronda FROM peserta WHERE is_deleted = 0 ORDER BY nama ASC";
+    $query = "SELECT id, nama, no_wa FROM peserta WHERE is_deleted = 0 ORDER BY nama ASC";
     $result = $conn->query($query);
 
     if ($result && $result->num_rows > 0) {
@@ -147,8 +147,7 @@ if ($jenis == 'pemenang') {
             $baris = array(
                 $row['id'],
                 $row['nama'],
-                "'" . $row['no_wa'], // Tanda kutip agar excel tidak merusak format nomor HP
-                $row['hari_ronda'] ? $row['hari_ronda'] : '-'
+                "'" . $row['no_wa'] // Tanda kutip agar excel tidak merusak format nomor HP
             );
             
             $total_lunas = 0;
