@@ -380,8 +380,9 @@ if ($res_bayar) {
                             }
                             
                             if ($is_admin) {
-                                echo "<td>
-                                    <a href='edit.php?id=$pid' class='btn-aksi btn-edit' style='font-size:0.75rem; padding: 2px 5px;'>Edit</a>
+                                echo "<td style='white-space: nowrap;'>
+                                    <a href='edit.php?id=$pid' class='btn-aksi btn-edit' style='font-size:0.75rem; padding: 3px 6px;'>📝 Edit</a>
+                                    <a href='hapus.php?id=$pid' class='btn-aksi btn-hapus' style='font-size:0.75rem; padding: 3px 6px; background-color: #ef4444; color: white; border:none; border-radius: 5px; text-decoration: none; margin-left: 5px;' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data warga ini?\")'>🗑️ Hapus</a>
                                 </td>";
                             }
                             echo "</tr>";
