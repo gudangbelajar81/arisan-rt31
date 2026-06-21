@@ -25,7 +25,7 @@
             <a href="daftar.php" class="btn btn-primary btn-cta-pulse"><span style="position: relative; z-index: 2;">📝 Daftar Arisan Sekarang</span></a>
             <a href="peserta.php" class="btn btn-secondary">👥 Lihat Siapa Saja yang Sudah Daftar</a>
         <div style="text-align: center; margin-top: 15px;">
-            <button id="btn-install" class="btn" style="display: none; background: #1f2937; border: 1px solid #cca300; color: #cca300; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">📲 Instal Aplikasi di HP</button>
+            <button id="btn-install" style="display: none; background: transparent; border: 1px solid rgba(0,0,0,0.15); color: #64748b; padding: 6px 18px; border-radius: 50px; font-weight: 400; font-size: 0.8rem; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s ease;">📱 Instal di HP</button>
         </div>
         
         <div style="text-align: center; margin-top: 30px;">
