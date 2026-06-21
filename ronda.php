@@ -208,7 +208,7 @@ if (isset($_GET['msg'])) {
                     echo "<input type='hidden' name='action' value='add'>";
                     echo "<input type='hidden' name='hari' value='$hari'>";
                     echo "<select name='id_peserta' required>";
-                    echo "<option value=''>+ Warga nganggur...</option>";
+                    echo "<option value=''>+ Warga RT 31...</option>";
                     foreach ($unassigned as $u) {
                         echo "<option value='{$u['id']}'>" . htmlspecialchars($u['nama']) . "</option>";
                     }
