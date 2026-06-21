@@ -25,6 +25,74 @@ if ($is_admin && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])
     }
 }
 
+// Tangani Penambahan Bulan Otomatis (Khusus Admin)
+if ($is_admin && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'tambah_bulan_otomatis') {
+    $cek_kolom = $conn->query("SELECT nilai FROM pengaturan WHERE kunci = 'kolom_bulan'");
+    $row_kolom = $cek_kolom->fetch_assoc();
+    $list_sekarang = array_filter(array_map('trim', explode(',', $row_kolom['nilai'])));
+    
+    if (empty($list_sekarang)) {
+        // Jika tabel kosong, tambahkan Januari tahun ini
+        $bulan_baru = "Januari " . date('Y');
+        $kolom_baru = $bulan_baru;
+        $stmt = $conn->prepare("UPDATE pengaturan SET nilai = ? WHERE kunci = 'kolom_bulan'");
+        $stmt->bind_param("s", $kolom_baru);
+        $stmt->execute();
+        catat_log($conn, "Admin menambahkan kolom bulan otomatis pertama: $bulan_baru");
+    } else {
+        $bulan_terakhir = end($list_sekarang);
+        
+        $arr_nama_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        $parts = explode(" ", trim($bulan_terakhir));
+        
+        // Tangani jika pengetikan manual sebelumnya huruf kecil/besar sembarangan
+        $nama_bulan_lama = ucfirst(strtolower(trim($parts[0])));
+        $tahun_lama = isset($parts[1]) ? (int)$parts[1] : (int)date('Y');
+        
+        $index = array_search($nama_bulan_lama, $arr_nama_bulan);
+        if ($index !== false) {
+            $index_baru = $index + 1;
+            $tahun_baru = $tahun_lama;
+            if ($index_baru > 11) {
+                $index_baru = 0;
+                $tahun_baru++;
+            }
+            $bulan_baru = $arr_nama_bulan[$index_baru] . " " . $tahun_baru;
+            
+            $kolom_baru = $row_kolom['nilai'] . "," . $bulan_baru;
+            $stmt = $conn->prepare("UPDATE pengaturan SET nilai = ? WHERE kunci = 'kolom_bulan'");
+            $stmt->bind_param("s", $kolom_baru);
+            $stmt->execute();
+            
+            catat_log($conn, "Admin menambahkan kolom bulan otomatis: $bulan_baru");
+        }
+    }
+    header("Location: peserta.php");
+    exit;
+}
+
+// Tangani Penghapusan Kolom Bulan (Khusus Admin)
+if ($is_admin && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'hapus_bulan') {
+    $bulan_hapus = trim($_POST['bulan_hapus']);
+    if (!empty($bulan_hapus)) {
+        $cek_kolom = $conn->query("SELECT nilai FROM pengaturan WHERE kunci = 'kolom_bulan'");
+        $row_kolom = $cek_kolom->fetch_assoc();
+        $list_sekarang = array_filter(array_map('trim', explode(',', $row_kolom['nilai'])));
+        
+        // Buang bulan yang dihapus dari array
+        $list_baru = array_diff($list_sekarang, [$bulan_hapus]);
+        $kolom_baru = implode(",", $list_baru);
+        
+        $stmt = $conn->prepare("UPDATE pengaturan SET nilai = ? WHERE kunci = 'kolom_bulan'");
+        $stmt->bind_param("s", $kolom_baru);
+        $stmt->execute();
+        
+        catat_log($conn, "Admin menyembunyikan/menghapus kolom bulan: $bulan_hapus");
+        header("Location: peserta.php");
+        exit;
+    }
+}
+
 // Ambil daftar bulan
 $cek_kolom = $conn->query("SELECT nilai FROM pengaturan WHERE kunci = 'kolom_bulan'");
 $row_kolom = $cek_kolom->fetch_assoc();
@@ -170,18 +238,26 @@ if ($res_bayar) {
 <body>
     <div class="container" style="max-width: 1200px;">
         <a href="index.php" class="back-link">🔙 Kembali ke Menu Awal</a>
-        <div class="card" style="border-top: 5px solid #cca300; margin-bottom: 20px;">
-            <h2 style="color: var(--primary-dark); margin-bottom: 5px;">💰 Buku Kas Arisan RT 31</h2>
-            <p style="color: #666;">Matriks pembayaran arisan warga (Tarif: Rp 20.000 / Bulan).</p>
-            <?php if($is_admin) echo "<p style='color: #ef4444; font-size: 0.85rem; font-weight: bold; margin-top: 5px;'>🔓 Mode Admin: Anda dapat mencentang pembayaran secara instan.</p>"; ?>
+        <div class="card" style="border-top: 3px solid #cca300; margin-bottom: 15px; padding: 15px;">
+            <h2 style="color: var(--primary-dark); margin-bottom: 2px; font-size: 1.2rem;">💰 Buku Kas Arisan RT 31</h2>
+            <p style="color: #666; font-size: 0.85rem; margin: 0;">Tarif: Rp 20.000 / Bulan.</p>
         </div>
         
         <?php if ($is_admin): ?>
-        <form method="POST" class="form-tambah-bulan">
-            <input type="hidden" name="action" value="tambah_bulan">
-            <input type="text" name="bulan_baru" placeholder="Contoh: April 2026" required autocomplete="off">
-            <button type="submit">➕ Tambah Kolom Bulan</button>
-        </form>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+            <form method="POST" style="flex: 1; min-width: 250px;">
+                <input type="hidden" name="action" value="tambah_bulan_otomatis">
+                <button type="submit" style="width: 100%; height: 100%; background: #217346; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s;" onmouseover="this.style.background='#1e6b41'" onmouseout="this.style.background='#217346'">
+                    ⏭️ Lanjut Bulan Berikutnya
+                </button>
+            </form>
+            
+            <form method="POST" class="form-tambah-bulan" style="flex: 2; margin-bottom: 0; min-width: 300px;">
+                <input type="hidden" name="action" value="tambah_bulan">
+                <input type="text" name="bulan_baru" placeholder="...Atau Ketik Manual (Contoh: April 2026)" required autocomplete="off">
+                <button type="submit">➕ Tambah Manual</button>
+            </form>
+        </div>
         <?php endif; ?>
         
         <input type="text" id="searchInput" class="search-box" placeholder="🔍 Cari nama warga di sini..." autocomplete="off">
@@ -191,10 +267,19 @@ if ($res_bayar) {
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th style="min-width: 200px;">Nama Warga</th>
+                        <th style="min-width: 150px; position: sticky; left: 0; background: #cca300; z-index: 15;">Nama Warga</th>
                         <?php 
                         foreach ($list_bulan as $bln) {
-                            echo "<th>" . htmlspecialchars($bln) . "</th>";
+                            $parts = explode(" ", trim($bln));
+                            $nama_bulan_saja = $parts[0];
+                            $tahun_saja = isset($parts[1]) ? $parts[1] : "";
+                            
+                            echo "<th style='min-width: 80px;'>";
+                            echo "<div style='font-size: 0.9rem;'>" . htmlspecialchars($nama_bulan_saja) . "</div>";
+                            if ($tahun_saja) {
+                                echo "<div style='font-size: 0.75rem; opacity: 0.8; font-weight: normal;'>" . htmlspecialchars($tahun_saja) . "</div>";
+                            }
+                            echo "</th>";
                         }
                         ?>
                         <?php if($is_admin): ?><th>Aksi</th><?php endif; ?>
