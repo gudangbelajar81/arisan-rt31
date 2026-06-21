@@ -69,7 +69,7 @@ if (isset($_GET['msg'])) {
             navigator.serviceWorker.register('sw.js');
         }
     </script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.0">
     <style>
         .grid-ronda {
             display: grid;

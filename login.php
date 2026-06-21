@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login <?php echo $title; ?></title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.0">
     <link rel="apple-touch-icon" href="logo_m.png">
 </head>
 <body style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5;">

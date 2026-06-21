@@ -136,7 +136,7 @@ if ($res_bayar) {
             navigator.serviceWorker.register('sw.js');
         }
     </script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.0">
     <style>
         .search-box {
             width: 100%;

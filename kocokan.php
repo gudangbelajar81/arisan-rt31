@@ -30,7 +30,7 @@ $res_pemenang = $conn->query($sql_pemenang);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mesin Kocokan Arisan RT 31</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.0">
     <style>
         .arena-kocokan {
             background: rgba(15, 23, 42, 0.6);
