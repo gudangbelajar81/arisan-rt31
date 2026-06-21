@@ -20,15 +20,33 @@ if ($is_admin) {
     }
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'add') {
-        $id_add = (int)$_POST['id_peserta'];
+        $nama_add = ucwords(strtolower(trim($_POST['nama_peserta'])));
         $hari_add = $_POST['hari'];
-        $stmt = $conn->prepare("UPDATE peserta SET hari_ronda = ? WHERE id = ?");
-        $stmt->bind_param("si", $hari_add, $id_add);
-        if ($stmt->execute()) {
-            catat_log($conn, "Admin menambahkan peserta ID $id_add ke piket $hari_add");
-            header("Location: ronda.php?msg=added");
-            exit;
+        
+        // Cari apakah nama sudah ada di database
+        $stmt = $conn->prepare("SELECT id FROM peserta WHERE nama = ? AND is_deleted = 0 LIMIT 1");
+        $stmt->bind_param("s", $nama_add);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        
+        if ($res->num_rows > 0) {
+            // Warga sudah terdaftar, update hari rondanya
+            $row = $res->fetch_assoc();
+            $id_add = $row['id'];
+            $stmt2 = $conn->prepare("UPDATE peserta SET hari_ronda = ? WHERE id = ?");
+            $stmt2->bind_param("si", $hari_add, $id_add);
+            $stmt2->execute();
+        } else {
+            // Warga baru (tidak ada di daftar arisan), masukkan ke database sebagai peserta khusus ronda
+            $no_wa_dummy = "-";
+            $stmt2 = $conn->prepare("INSERT INTO peserta (nama, no_wa, hari_ronda) VALUES (?, ?, ?)");
+            $stmt2->bind_param("sss", $nama_add, $no_wa_dummy, $hari_add);
+            $stmt2->execute();
         }
+        
+        catat_log($conn, "Admin merekrut $nama_add ke piket $hari_add");
+        header("Location: ronda.php?msg=added");
+        exit;
     }
 }
 
@@ -122,12 +140,18 @@ if (isset($_GET['msg'])) {
             display: flex;
             gap: 5px;
         }
-        .form-add select {
+        .form-add input[type="text"] {
             flex: 1;
-            padding: 8px;
+            padding: 8px 12px;
             border-radius: 8px;
             border: 1px solid #ccc;
             font-size: 0.9rem;
+            background: rgba(255,255,255,0.8);
+            outline: none;
+            transition: border 0.3s;
+        }
+        .form-add input[type="text"]:focus {
+            border: 1px solid #cca300;
         }
         .form-add button {
             background: #1e293b;
@@ -207,12 +231,7 @@ if (isset($_GET['msg'])) {
                     echo "<form method='POST' action='ronda.php' class='form-add'>";
                     echo "<input type='hidden' name='action' value='add'>";
                     echo "<input type='hidden' name='hari' value='$hari'>";
-                    echo "<select name='id_peserta' required>";
-                    echo "<option value=''>+ Warga RT 31...</option>";
-                    foreach ($unassigned as $u) {
-                        echo "<option value='{$u['id']}'>" . htmlspecialchars($u['nama']) . "</option>";
-                    }
-                    echo "</select>";
+                    echo "<input type='text' name='nama_peserta' list='warga-list' placeholder='Ketik nama warga...' required autocomplete='off'>";
                     echo "<button type='submit' title='Tambah ke jadwal'>➕</button>";
                     echo "</form>";
                 }
@@ -222,6 +241,14 @@ if (isset($_GET['msg'])) {
             }
             ?>
         </div>
+        
+        <?php if ($is_admin): ?>
+        <datalist id="warga-list">
+            <?php foreach ($unassigned as $u) {
+                echo "<option value=\"" . htmlspecialchars($u['nama']) . "\">";
+            } ?>
+        </datalist>
+        <?php endif; ?>
     </div>
 <script src="sound.js"></script>
 <script src="screensaver.js"></script>
