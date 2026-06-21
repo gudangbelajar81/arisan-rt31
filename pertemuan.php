@@ -249,6 +249,14 @@ if (isset($_GET['msg'])) {
             } ?>
         </datalist>
         <?php endif; ?>
+        
+        <div style="margin-top: 20px; text-align: right;">
+            <?php if($is_admin): ?>
+                <a href="logout.php" style="color: #dc3545; text-decoration: none; font-weight: bold;">🔓 Logout Admin</a>
+            <?php else: ?>
+                <a href="login.php" style="color: #ccc; text-decoration: none; font-size: 0.8rem;">🔒 Login Admin Rahasia</a>
+            <?php endif; ?>
+        </div>
     </div>
 <script src="sound.js"></script>
 <script src="screensaver.js"></script>
