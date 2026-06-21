@@ -1,5 +1,9 @@
 <?php
-// Cegah PHP dari throw exception yang bikin Blank Page (HTTP 500)
+// Tampilkan semua error untuk debugging 500
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 mysqli_report(MYSQLI_REPORT_OFF);
 
 // Fungsi cerdas untuk menangkap Environment Variables dari server Railway
@@ -15,7 +19,7 @@ $host = get_env_var("MYSQLHOST", "localhost");
 $user = get_env_var("MYSQLUSER", "root");
 $pass = get_env_var("MYSQLPASSWORD", "");
 $dbname = get_env_var("MYSQLDATABASE", "arisan_rt31");
-$port = get_env_var("MYSQLPORT", 3306);
+$port = (int) get_env_var("MYSQLPORT", 3306);
 
 // 1. Mencoba koneksi langsung
 $conn = @new mysqli($host, $user, $pass, $dbname, $port);
