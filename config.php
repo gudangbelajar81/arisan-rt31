@@ -21,11 +21,7 @@ $pass = get_env_var("MYSQLPASSWORD", "");
 $dbname = get_env_var("MYSQLDATABASE", "arisan_rt31");
 $port = (int) get_env_var("MYSQLPORT", 3306);
 
-// Konfigurasi Keamanan Multi-PIN
-$pin_arisan = "111111"; // PIN khusus Bendahara/Admin Arisan
-$pin_ronda = "222222";  // PIN khusus Komandan Ronda
-$pin_pertemuan = "333333"; // PIN khusus Sekretaris/Tuan Rumah
-$pin_master = "123456"; // PIN Sapu Jagat (Membuka semua akses)
+// PIN akan diambil dari Database (Tabel Pengaturan)
 
 // 1. Mencoba koneksi langsung
 $conn = @new mysqli($host, $user, $pass, $dbname, $port);
@@ -85,4 +81,38 @@ $sql_log_table = "CREATE TABLE IF NOT EXISTS log_aktivitas (
     waktu TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )";
 $conn->query($sql_log_table);
+// 7. Buat Tabel Pengaturan (Untuk PIN Dinamis)
+$sql_pengaturan = "CREATE TABLE IF NOT EXISTS pengaturan (
+    kunci VARCHAR(50) PRIMARY KEY,
+    nilai VARCHAR(255) NOT NULL
+)";
+$conn->query($sql_pengaturan);
+
+// 8. Masukkan PIN Default jika tabel kosong
+$cek_pengaturan = $conn->query("SELECT COUNT(*) as total FROM pengaturan");
+$row_pengaturan = $cek_pengaturan->fetch_assoc();
+if ($row_pengaturan['total'] == 0) {
+    $conn->query("INSERT INTO pengaturan (kunci, nilai) VALUES 
+        ('pin_master', '111080'),
+        ('pin_arisan', '111080'),
+        ('pin_ronda', '123'),
+        ('pin_pertemuan', '123')
+    ");
+}
+
+// 9. Muat PIN ke dalam variabel global
+$pin_master = "111080";
+$pin_arisan = "111080";
+$pin_ronda = "123";
+$pin_pertemuan = "123";
+
+$res_pin = $conn->query("SELECT * FROM pengaturan");
+if ($res_pin && $res_pin->num_rows > 0) {
+    while($row = $res_pin->fetch_assoc()) {
+        if ($row['kunci'] == 'pin_master') $pin_master = $row['nilai'];
+        if ($row['kunci'] == 'pin_arisan') $pin_arisan = $row['nilai'];
+        if ($row['kunci'] == 'pin_ronda') $pin_ronda = $row['nilai'];
+        if ($row['kunci'] == 'pin_pertemuan') $pin_pertemuan = $row['nilai'];
+    }
+}
 ?>
