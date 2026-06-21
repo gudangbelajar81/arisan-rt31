@@ -27,7 +27,7 @@
         </div>
         
         <div style="text-align: center; margin-top: 30px;">
-            <p style="color: #64748b; font-weight: 700; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 15px; opacity: 0.85; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">Sistem ini dibangun oleh Musyafa</p>
+            <p style="color: #94a3b8; font-weight: 400; font-size: 0.8rem; letter-spacing: 1px; margin-top: 20px; opacity: 0.7;">Sistem ini dibangun oleh Musyafa</p>
         </div>
     </div>
 <script src="sound.js"></script><script src="screensaver.js"></script></body>
