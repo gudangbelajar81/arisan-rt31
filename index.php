@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Arisan RT 31</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤝 Arisan Warga RT 31</h1>
+            <p>Guyub, Rukun, dan Sejahtera Bersama</p>
+        </div>
+        
+        <div class="menu-box">
+            <a href="daftar.php" class="btn btn-primary btn-cta-pulse"><span style="position: relative; z-index: 2;">📝 Daftar Arisan Sekarang</span></a>
+            <a href="peserta.php" class="btn btn-secondary">👥 Lihat Siapa Saja yang Sudah Daftar</a>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <p style="display: inline-block; background: rgba(255,255,255,0.65); padding: 6px 18px; border-radius: 20px; font-size: 0.85rem; color: #000; font-weight: 800; backdrop-filter: blur(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.8);">Sistem ini dibangun oleh Musyafa</p>
+        </div>
+    </div>
+<script src="sound.js"></script><script src="screensaver.js"></script></body>
+</html>
