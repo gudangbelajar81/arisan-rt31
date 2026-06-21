@@ -55,4 +55,11 @@ $sql_create_table = "CREATE TABLE IF NOT EXISTS peserta (
 if (!$conn->query($sql_create_table)) {
     die("Gagal membuat tabel: " . $conn->error);
 }
+
+// 3. Migrasi Database Aman (Soft-Delete)
+// Tambahkan kolom is_deleted jika belum ada di tabel peserta
+$check_column = $conn->query("SHOW COLUMNS FROM peserta LIKE 'is_deleted'");
+if ($check_column && $check_column->num_rows == 0) {
+    $conn->query("ALTER TABLE peserta ADD COLUMN is_deleted TINYINT(1) DEFAULT 0 AFTER blok_rumah");
+}
 ?>

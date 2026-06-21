@@ -33,7 +33,7 @@ $is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] 
                     <tbody>
                         <?php
                         // Memastikan nama terurut secara otomatis sesuai abjad (A di atas)
-                        $sql = "SELECT * FROM peserta ORDER BY nama ASC";
+                        $sql = "SELECT * FROM peserta WHERE is_deleted = 0 ORDER BY nama ASC";
                         $result = $conn->query($sql);
                         
                         if ($result->num_rows > 0) {
@@ -66,6 +66,7 @@ $is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] 
         
         <div style="margin-top: 20px; text-align: right;">
             <?php if($is_admin): ?>
+                <a href="export.php" style="color: #217346; text-decoration: none; font-weight: bold; margin-right: 15px; border: 1px solid #217346; padding: 5px 10px; border-radius: 5px;">📊 Download Excel</a>
                 <a href="logout.php" style="color: #dc3545; text-decoration: none; font-weight: bold;">🔓 Logout Admin</a>
             <?php else: ?>
                 <a href="login.php" style="color: #ccc; text-decoration: none; font-size: 0.8rem;">🔒 Login Admin Rahasia</a>

@@ -2,19 +2,26 @@
 session_start();
 require 'config.php';
 
-// Cek apakah Admin sudah login
+// Cek keamanan akses admin
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    die("Akses Ditolak! Anda tidak memiliki akses ke fitur ini.");
+    header("Location: login.php");
+    exit;
 }
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $stmt = $conn->prepare("DELETE FROM peserta WHERE id = ?");
+    
+    // Fitur Soft Delete: Jangan hapus secara fisik dari mesin, tapi sembunyikan
+    $stmt = $conn->prepare("UPDATE peserta SET is_deleted = 1 WHERE id = ?");
     $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $stmt->close();
+    
+    if ($stmt->execute()) {
+        header("Location: peserta.php?pesan=hapus_sukses");
+    } else {
+        echo "Gagal mengamankan (menyembunyikan) data: " . $conn->error;
+    }
+} else {
+    header("Location: peserta.php");
 }
-
-header("Location: peserta.php");
 exit();
 ?>
