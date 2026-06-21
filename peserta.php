@@ -75,6 +75,16 @@ if ($is_admin && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])
 if ($is_admin && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'hapus_bulan') {
     $bulan_hapus = trim($_POST['bulan_hapus']);
     if (!empty($bulan_hapus)) {
+        // Validasi Ekstra: Pastikan benar-benar tidak ada pembayaran!
+        $cek_bayar = $conn->prepare("SELECT COUNT(*) as total FROM pembayaran_arisan WHERE bulan = ?");
+        $cek_bayar->bind_param("s", $bulan_hapus);
+        $cek_bayar->execute();
+        $row_bayar_cek = $cek_bayar->get_result()->fetch_assoc();
+        
+        if ($row_bayar_cek['total'] > 0) {
+            die("Fatal Error: Anda tidak bisa menghapus bulan yang sudah memiliki data pembayaran!");
+        }
+        
         $cek_kolom = $conn->query("SELECT nilai FROM pengaturan WHERE kunci = 'kolom_bulan'");
         $row_kolom = $cek_kolom->fetch_assoc();
         $list_sekarang = array_filter(array_map('trim', explode(',', $row_kolom['nilai'])));
@@ -317,8 +327,11 @@ if ($res_bayar) {
                             }
                             
                             $jumlah_bayar = isset($pembayaran_per_bulan[$bln]) ? $pembayaran_per_bulan[$bln] : 0;
-                            if ($is_admin && $jumlah_bayar == 0) {
-                                echo "<form method='POST' style='position: absolute; top: 5px; right: 5px; margin: 0;' onsubmit=\"return confirm('Yakin ingin menghapus kolom " . htmlspecialchars($bln) . "?');\">";
+                            // Selalu render form, tapi sembunyikan jika jumlah_bayar > 0
+                            $display_btn = ($jumlah_bayar > 0) ? "none" : "block";
+                            
+                            if ($is_admin) {
+                                echo "<form method='POST' class='form-hapus-bulan' data-bulan='" . htmlspecialchars($bln, ENT_QUOTES) . "' style='position: absolute; top: 5px; right: 5px; margin: 0; display: $display_btn;' onsubmit=\"return confirm('Yakin ingin menghapus kolom " . htmlspecialchars($bln) . "?');\">";
                                 echo "<input type='hidden' name='action' value='hapus_bulan'>";
                                 echo "<input type='hidden' name='bulan_hapus' value='" . htmlspecialchars($bln, ENT_QUOTES) . "'>";
                                 echo "<button type='submit' style='background: none; border: none; color: #dc3545; cursor: pointer; font-size: 1.1rem; padding: 0;' title='Hapus Bulan'>🗑️</button>";
@@ -437,10 +450,21 @@ document.querySelectorAll('.chk-bayar').forEach(chk => {
         .then(data => {
             if(data.status === 'success') {
                 if(action === 'check') {
-                    showToast('✅ Lunas: ' + bulan);
+                    showToast('✔️ Lunas: ' + bulan);
                 } else {
-                    showToast('✖ Batal Lunas: ' + bulan);
+                    showToast('❌ Batal Lunas: ' + bulan);
                 }
+                
+                // Update live visibility tombol hapus bulan
+                let allCheckboxes = document.querySelectorAll('.chk-bayar[data-bulan="'+bulan+'"]');
+                let checkedCount = 0;
+                allCheckboxes.forEach(cb => { if(cb.checked) checkedCount++; });
+                
+                let formHapus = document.querySelector('.form-hapus-bulan[data-bulan="'+bulan+'"]');
+                if (formHapus) {
+                    formHapus.style.display = (checkedCount > 0) ? 'none' : 'block';
+                }
+                
             } else {
                 alert('Gagal: ' + data.message);
                 this.checked = !this.checked; // Kembalikan state
