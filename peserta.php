@@ -399,9 +399,8 @@ if ($res_bayar) {
         <div style="margin-top: 20px; text-align: right;">
             <?php if($is_admin): ?>
                 <div style="margin-bottom: 10px;">
-                    <a href="export.php?jenis=buku_kas" style="color: #217346; text-decoration: none; font-weight: bold; margin-right: 10px; border: 1px solid #217346; padding: 5px 10px; border-radius: 5px; display: inline-block; margin-bottom: 5px;">📊 Excel Buku Kas</a>
-                    <a href="export.php?jenis=pemenang" style="color: #0284c7; text-decoration: none; font-weight: bold; margin-right: 15px; border: 1px solid #0284c7; padding: 5px 10px; border-radius: 5px; display: inline-block; margin-bottom: 5px;">🏆 Excel Pemenang</a>
-                    <a href="logout.php?modul=arisan" style="color: #dc3545; text-decoration: none; font-weight: bold;">🚪 Logout Admin</a>
+                    <a href="export.php?jenis=buku_kas" style="color: #217346; text-decoration: none; font-weight: bold; margin-right: 15px; border: 1px solid #217346; padding: 5px 10px; border-radius: 5px; display: inline-block; margin-bottom: 5px;">📊 Download Buku Kas</a>
+                    <a href="logout.php?modul=arisan" style="color: #dc3545; text-decoration: none; font-weight: bold; padding: 5px 10px; display: inline-block; margin-bottom: 5px;">🚪 Logout Admin</a>
                 </div>
             <?php else: ?>
                 <a href="login.php?modul=arisan" style="color: #ccc; text-decoration: none; font-size: 0.8rem;">🔒 Login Admin Rahasia</a>

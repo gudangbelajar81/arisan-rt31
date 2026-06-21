@@ -195,7 +195,12 @@ $res_pemenang = $conn->query($sql_pemenang);
         </div>
         
         <div class="hall-of-fame">
-            <h2 style="color: var(--primary-dark); margin:0; border-bottom: 2px solid #cca300; padding-bottom: 10px; display:inline-block;">🏆 Papan Pemenang (Hall of Fame)</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #cca300; padding-bottom: 10px; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                <h2 style="color: var(--primary-dark); margin:0;">🏆 Papan Pemenang (Hall of Fame)</h2>
+                <?php if($is_admin): ?>
+                    <a href="export.php?jenis=pemenang" style="background: #0284c7; color: white; text-decoration: none; font-weight: bold; padding: 6px 12px; border-radius: 5px; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block;">🏆 Download Excel Pemenang</a>
+                <?php endif; ?>
+            </div>
             <table id="tabelPemenang">
                 <thead>
                     <tr>

@@ -174,6 +174,11 @@ if (isset($_GET['msg'])) {
         <div class="card" style="margin-bottom: 20px;">
             <h2 style="color: var(--primary-dark); margin-bottom: 5px;"><span class="shine-text">🛡️ Dasbor Siskamling</span></h2>
             <p style="color: #666;">Daftar piket keamanan lingkungan RT 31 dari hari Senin hingga Minggu.</p>
+            <?php if($is_admin): ?>
+                <div style="margin-top: 15px;">
+                    <a href="export.php?jenis=ronda" style="background: #10b981; color: white; text-decoration: none; font-weight: bold; padding: 6px 12px; border-radius: 5px; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block;">🛡️ Download Excel Ronda</a>
+                </div>
+            <?php endif; ?>
             <?php if ($is_admin) echo "<p style='color: #ef4444; font-size: 0.85rem; font-weight: bold; margin-top: 5px;'>🔓 Mode Admin Aktif: Anda dapat menambah atau menghapus petugas.</p>"; ?>
         </div>
         

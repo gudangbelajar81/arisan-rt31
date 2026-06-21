@@ -43,6 +43,66 @@ if ($jenis == 'pemenang') {
     fclose($file);
     exit;
 
+} elseif ($jenis == 'ronda') {
+    // ==== EXPORT JADWAL RONDA ====
+    $filename = "Backup_Jadwal_Ronda_RT31_" . date('Y-m-d_H-i') . ".csv";
+    header("Content-Description: File Transfer");
+    header("Content-Disposition: attachment; filename=$filename");
+    header("Content-Type: text/csv; charset=UTF-8"); 
+
+    $file = fopen('php://output', 'w');
+    fputs($file, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+
+    fputcsv($file, array("Hari Ronda", "Nama Warga", "Nomor WhatsApp"));
+
+    $query = "SELECT hari_ronda, nama, no_wa FROM peserta WHERE is_deleted = 0 AND hari_ronda IS NOT NULL AND hari_ronda != '' ORDER BY FIELD(hari_ronda, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'), nama ASC";
+    $result = $conn->query($query);
+
+    if ($result && $result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            fputcsv($file, array(
+                $row['hari_ronda'],
+                $row['nama'],
+                "'" . $row['no_wa']
+            ));
+        }
+    } else {
+        fputcsv($file, array("Belum ada data jadwal ronda"));
+    }
+
+    fclose($file);
+    exit;
+
+} elseif ($jenis == 'pertemuan') {
+    // ==== EXPORT JADWAL PERTEMUAN ====
+    $filename = "Backup_Jadwal_Pertemuan_RT31_" . date('Y-m-d_H-i') . ".csv";
+    header("Content-Description: File Transfer");
+    header("Content-Disposition: attachment; filename=$filename");
+    header("Content-Type: text/csv; charset=UTF-8"); 
+
+    $file = fopen('php://output', 'w');
+    fputs($file, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+
+    fputcsv($file, array("Bulan Pertemuan", "Nama Tuan Rumah", "Nomor WhatsApp"));
+
+    $query = "SELECT bulan_pertemuan, nama, no_wa FROM peserta WHERE is_deleted = 0 AND bulan_pertemuan IS NOT NULL AND bulan_pertemuan != '' ORDER BY bulan_pertemuan ASC";
+    $result = $conn->query($query);
+
+    if ($result && $result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            fputcsv($file, array(
+                $row['bulan_pertemuan'],
+                $row['nama'],
+                "'" . $row['no_wa']
+            ));
+        }
+    } else {
+        fputcsv($file, array("Belum ada data jadwal pertemuan"));
+    }
+
+    fclose($file);
+    exit;
+
 } else {
     // ==== EXPORT BUKU KAS ====
     // Ambil daftar bulan (kolom)

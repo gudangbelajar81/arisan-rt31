@@ -175,6 +175,11 @@ if (isset($_GET['msg'])) {
         <div class="card" style="margin-bottom: 20px; border-left: 5px solid #2563eb;">
             <h2 style="color: #1e3a8a; margin-bottom: 5px;">📅 Jadwal Tuan Rumah Pertemuan</h2>
             <p style="color: #666;">Daftar petugas / tuan rumah arisan RT 31 dari Januari hingga Desember.</p>
+            <?php if($is_admin): ?>
+                <div style="margin-top: 15px;">
+                    <a href="export.php?jenis=pertemuan" style="background: #2563eb; color: white; text-decoration: none; font-weight: bold; padding: 6px 12px; border-radius: 5px; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block;">📅 Download Excel Pertemuan</a>
+                </div>
+            <?php endif; ?>
             <?php if ($is_admin) echo "<p style='color: #ef4444; font-size: 0.85rem; font-weight: bold; margin-top: 5px;'>🔓 Mode Admin: Anda dapat menambah atau menghapus petugas bulanan.</p>"; ?>
         </div>
         
