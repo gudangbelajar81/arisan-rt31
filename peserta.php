@@ -356,7 +356,16 @@ if ($res_bayar) {
                             $pid = $row['id'];
                             echo "<tr>";
                             echo "<td class='no-peserta'>" . $no++ . "</td>";
-                            echo "<td class='nama-peserta'>" . htmlspecialchars($row['nama']) . "</td>";
+                            
+                            $total_lunas = 0;
+                            foreach ($list_bulan as $bln) {
+                                if (isset($pembayaran[$pid][$bln])) $total_lunas++;
+                            }
+                            $is_nunggak = ($total_lunas < count($list_bulan));
+                            $mark_display = $is_nunggak ? "inline" : "none";
+                            $mark = " <span class='mark-nunggak' style='color:#ef4444; font-size:0.8rem; display:$mark_display;' title='Ada tunggakan/belum lengkap'>⚠️</span>";
+                            
+                            echo "<td class='nama-peserta'>" . htmlspecialchars($row['nama']) . $mark . "</td>";
                             
                             foreach ($list_bulan as $bln) {
                                 $lunas = isset($pembayaran[$pid][$bln]);
@@ -463,6 +472,24 @@ document.querySelectorAll('.chk-bayar').forEach(chk => {
                 let formHapus = document.querySelector('.form-hapus-bulan[data-bulan="'+bulan+'"]');
                 if (formHapus) {
                     formHapus.style.display = (checkedCount > 0) ? 'none' : 'block';
+                }
+                
+                // Update live mark nunggak di nama peserta
+                // Menggunakan this.closest('tr') tidak bisa karena kita berada di dalam Promise / Arrow function yang this-nya bukan elemen
+                // Tapi ini adalah arrow function dari Promise, 'this' mengacu ke context luar jika arrow function.
+                // Oh wait, fetch().then() arrow function mewarisi 'this' dari event listener!
+                let row = this.closest('tr');
+                let allRowCheckboxes = row.querySelectorAll('.chk-bayar');
+                let rowCheckedCount = 0;
+                allRowCheckboxes.forEach(cb => { if(cb.checked) rowCheckedCount++; });
+                
+                let markNode = row.querySelector('.mark-nunggak');
+                if (markNode) {
+                    if (rowCheckedCount < allRowCheckboxes.length) {
+                        markNode.style.display = 'inline';
+                    } else {
+                        markNode.style.display = 'none';
+                    }
                 }
                 
             } else {
