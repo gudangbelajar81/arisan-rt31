@@ -111,15 +111,10 @@ $list_bulan = array_filter(array_map('trim', explode(',', $row_kolom['nilai'])))
 // Ambil data pembayaran
 $pembayaran = [];
 $pembayaran_per_bulan = [];
-$check_warna = $conn->query("SHOW COLUMNS FROM pembayaran_arisan LIKE 'status_warna'");
-$has_warna = ($check_warna && $check_warna->num_rows > 0);
-
-$query_bayar = $has_warna ? "SELECT peserta_id, bulan, status_warna FROM pembayaran_arisan" : "SELECT peserta_id, bulan FROM pembayaran_arisan";
-$res_bayar = $conn->query($query_bayar);
+$res_bayar = $conn->query("SELECT peserta_id, bulan FROM pembayaran_arisan");
 if ($res_bayar) {
     while($row = $res_bayar->fetch_assoc()) {
-        $warna = ($has_warna && !empty($row['status_warna'])) ? $row['status_warna'] : 'hijau';
-        $pembayaran[$row['peserta_id']][$row['bulan']] = $warna;
+        $pembayaran[$row['peserta_id']][$row['bulan']] = true;
         if (!isset($pembayaran_per_bulan[$row['bulan']])) {
             $pembayaran_per_bulan[$row['bulan']] = 0;
         }
@@ -364,18 +359,13 @@ if ($res_bayar) {
                             echo "<td class='nama-peserta'>" . htmlspecialchars($row['nama']) . "</td>";
                             
                             foreach ($list_bulan as $bln) {
-                                $warna = isset($pembayaran[$pid][$bln]) ? $pembayaran[$pid][$bln] : '';
+                                $lunas = isset($pembayaran[$pid][$bln]);
                                 echo "<td>";
-                                
-                                $badge = "<div class='badge-bayar badge-empty'>⬜</div>"; // Default kosong
-                                if ($warna == 'hijau') $badge = "<div class='badge-bayar badge-hijau'>✅</div>";
-                                if ($warna == 'merah') $badge = "<div class='badge-bayar badge-merah'>⚠️</div>";
-                                if ($warna == 'biru')  $badge = "<div class='badge-bayar badge-biru'>🔵</div>";
-                                
                                 if ($is_admin) {
-                                    echo "<div class='cell-klik' data-id='$pid' data-bulan='" . htmlspecialchars($bln, ENT_QUOTES) . "' data-warna='$warna' onclick='bukaMenuBayar(this)'>$badge</div>";
+                                    $checked = $lunas ? "checked" : "";
+                                    echo "<input type='checkbox' class='chk-bayar' data-id='$pid' data-bulan='" . htmlspecialchars($bln, ENT_QUOTES) . "' $checked>";
                                 } else {
-                                    echo $badge;
+                                    echo $lunas ? "<span class='badge-lunas'>✅</span>" : "<span class='badge-belum'>✖</span>";
                                 }
                                 echo "</td>";
                             }
@@ -408,24 +398,6 @@ if ($res_bayar) {
     
     <div id="toast">✅ Disimpan!</div>
 
-<?php if($is_admin): ?>
-<!-- Modal Menu Pembayaran -->
-<div id="modal-menu-bayar" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center; backdrop-filter:blur(3px);">
-    <div style="background:white; padding:25px; border-radius:15px; width:90%; max-width:350px; text-align:center; box-shadow:0 15px 30px rgba(0,0,0,0.3); transform: scale(0.9); transition: transform 0.2s; position:relative;">
-        <button onclick="tutupMenuBayar()" style="position:absolute; top:10px; right:15px; background:none; border:none; font-size:1.5rem; color:#888; cursor:pointer;">&times;</button>
-        <h3 id="menu-bayar-title" style="margin-bottom:20px; color:#1e293b; font-size:1.1rem; line-height:1.4;">Pilih Status</h3>
-        
-        <button class="btn-menu-bayar" data-action="check_hijau" style="display:block; width:100%; margin-bottom:10px; padding:15px; background:linear-gradient(145deg, #2ea84b, #217346); color:white; border:none; border-radius:10px; font-size:1rem; font-weight:bold; cursor:pointer; box-shadow:0 4px 0 #1b5e20;">✅ Lunas Tepat Waktu</button>
-        
-        <button class="btn-menu-bayar" data-action="check_merah" style="display:block; width:100%; margin-bottom:10px; padding:15px; background:linear-gradient(145deg, #ef4444, #dc2626); color:white; border:none; border-radius:10px; font-size:1rem; font-weight:bold; cursor:pointer; box-shadow:0 4px 0 #991b1b;">⚠️ Lunas (Bayar Hutang)</button>
-        
-        <button class="btn-menu-bayar" data-action="check_biru" style="display:block; width:100%; margin-bottom:10px; padding:15px; background:linear-gradient(145deg, #3b82f6, #2563eb); color:white; border:none; border-radius:10px; font-size:1rem; font-weight:bold; cursor:pointer; box-shadow:0 4px 0 #1e40af;">🔵 Lunas (Lebih Awal)</button>
-        
-        <button class="btn-menu-bayar" data-action="uncheck" style="display:block; width:100%; margin-top:20px; padding:15px; background:#f1f5f9; color:#475569; border:2px dashed #cbd5e1; border-radius:10px; font-size:1rem; font-weight:bold; cursor:pointer;">❌ Kosongkan / Batal</button>
-    </div>
-</div>
-<?php endif; ?>
-
 <script>
 // Live Search Logic
 document.getElementById('searchInput').addEventListener('keyup', function() {
@@ -445,7 +417,7 @@ document.getElementById('searchInput').addEventListener('keyup', function() {
     });
 });
 
-// AJAX Menu Logic (Khusus Admin)
+// AJAX Checkbox Logic (Khusus Admin)
 <?php if ($is_admin): ?>
 const toast = document.getElementById('toast');
 let toastTimeout;
@@ -459,41 +431,16 @@ function showToast(msg) {
     }, 2500);
 }
 
-let activeCell = null;
-let activePid = null;
-let activeBulan = null;
-
-function bukaMenuBayar(element) {
-    activeCell = element;
-    activePid = element.getAttribute('data-id');
-    activeBulan = element.getAttribute('data-bulan');
-    
-    // Set title
-    let nama = element.closest('tr').querySelector('.nama-peserta').innerText;
-    document.getElementById('menu-bayar-title').innerText = `Status ${nama} \n Bulan ${activeBulan}`;
-    
-    let modal = document.getElementById('modal-menu-bayar');
-    modal.style.display = 'flex';
-    setTimeout(() => { modal.querySelector('div').style.transform = 'scale(1)'; }, 10);
-}
-
-function tutupMenuBayar() {
-    let modal = document.getElementById('modal-menu-bayar');
-    modal.querySelector('div').style.transform = 'scale(0.9)';
-    setTimeout(() => { modal.style.display = 'none'; }, 200);
-}
-
-document.querySelectorAll('.btn-menu-bayar').forEach(btn => {
-    btn.addEventListener('click', function() {
-        if (!activeCell) return;
+document.querySelectorAll('.chk-bayar').forEach(chk => {
+    chk.addEventListener('change', function() {
+        let pid = this.getAttribute('data-id');
+        let bulan = this.getAttribute('data-bulan');
+        let action = this.checked ? 'check' : 'uncheck';
         
-        let action = this.getAttribute('data-action');
         let formData = new FormData();
-        formData.append('peserta_id', activePid);
-        formData.append('bulan', activeBulan);
+        formData.append('peserta_id', pid);
+        formData.append('bulan', bulan);
         formData.append('action', action);
-        
-        tutupMenuBayar();
         
         fetch('proses_bayar.php', {
             method: 'POST',
@@ -502,39 +449,31 @@ document.querySelectorAll('.btn-menu-bayar').forEach(btn => {
         .then(response => response.json())
         .then(data => {
             if(data.status === 'success') {
-                if(action === 'uncheck') {
-                    showToast('❌ Kosong: ' + activeBulan);
-                    activeCell.innerHTML = "<div class='badge-bayar badge-empty'>⬜</div>";
-                    activeCell.setAttribute('data-warna', '');
+                if(action === 'check') {
+                    showToast('✔️ Lunas: ' + bulan);
                 } else {
-                    let w = data.warna;
-                    showToast('✔️ Lunas (' + w.toUpperCase() + ')');
-                    activeCell.setAttribute('data-warna', w);
-                    if (w === 'hijau') activeCell.innerHTML = "<div class='badge-bayar badge-hijau'>✅</div>";
-                    if (w === 'merah') activeCell.innerHTML = "<div class='badge-bayar badge-merah'>⚠️</div>";
-                    if (w === 'biru') activeCell.innerHTML = "<div class='badge-bayar badge-biru'>🔵</div>";
+                    showToast('❌ Batal Lunas: ' + bulan);
                 }
                 
                 // Update live visibility tombol hapus bulan
-                // Kita hitung jumlah cell yang tidak kosong (data-warna != '')
-                let allCells = document.querySelectorAll(`.cell-klik[data-bulan="${activeBulan}"]`);
-                let filledCount = 0;
-                allCells.forEach(cell => { 
-                    if(cell.getAttribute('data-warna') !== '') filledCount++; 
-                });
+                let allCheckboxes = document.querySelectorAll('.chk-bayar[data-bulan="'+bulan+'"]');
+                let checkedCount = 0;
+                allCheckboxes.forEach(cb => { if(cb.checked) checkedCount++; });
                 
-                let formHapus = document.querySelector(`.form-hapus-bulan[data-bulan="${activeBulan}"]`);
+                let formHapus = document.querySelector('.form-hapus-bulan[data-bulan="'+bulan+'"]');
                 if (formHapus) {
-                    formHapus.style.display = (filledCount > 0) ? 'none' : 'block';
+                    formHapus.style.display = (checkedCount > 0) ? 'none' : 'block';
                 }
                 
             } else {
                 alert('Gagal: ' + data.message);
+                this.checked = !this.checked; // Kembalikan state
             }
         })
         .catch(error => {
             console.error('Error:', error);
             alert('Terjadi kesalahan jaringan.');
+            this.checked = !this.checked;
         });
     });
 });

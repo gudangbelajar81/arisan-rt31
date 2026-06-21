@@ -136,12 +136,6 @@ $sql_bayar = "CREATE TABLE IF NOT EXISTS pembayaran_arisan (
 )";
 $conn->query($sql_bayar);
 
-// Tambah kolom status_warna jika belum ada
-$check_warna = $conn->query("SHOW COLUMNS FROM pembayaran_arisan LIKE 'status_warna'");
-if ($check_warna && $check_warna->num_rows == 0) {
-    $conn->query("ALTER TABLE pembayaran_arisan ADD COLUMN status_warna VARCHAR(20) DEFAULT 'hijau' AFTER bulan");
-}
-
 // Tambahkan default kolom bulan jika belum ada
 $cek_kolom = $conn->query("SELECT nilai FROM pengaturan WHERE kunci = 'kolom_bulan'");
 if ($cek_kolom && $cek_kolom->num_rows == 0) {
