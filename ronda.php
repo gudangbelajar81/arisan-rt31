@@ -39,9 +39,12 @@ if ($is_admin) {
         } else {
             // Warga baru (tidak ada di daftar arisan), masukkan ke database sebagai peserta khusus ronda
             $no_wa_dummy = "-";
-            $stmt2 = $conn->prepare("INSERT INTO peserta (nama, no_wa, hari_ronda) VALUES (?, ?, ?)");
-            $stmt2->bind_param("sss", $nama_add, $no_wa_dummy, $hari_add);
-            $stmt2->execute();
+            $blok_dummy = "";
+            $stmt2 = $conn->prepare("INSERT INTO peserta (nama, no_wa, blok_rumah, hari_ronda) VALUES (?, ?, ?, ?)");
+            $stmt2->bind_param("ssss", $nama_add, $no_wa_dummy, $blok_dummy, $hari_add);
+            if(!$stmt2->execute()) {
+                error_log("Error Insert Ronda: " . $stmt2->error);
+            }
         }
         
         catat_log($conn, "Admin merekrut $nama_add ke piket $hari_add");

@@ -38,9 +38,12 @@ if ($is_admin) {
         } else {
             // Warga baru (tidak ada di daftar arisan)
             $no_wa_dummy = "-";
-            $stmt2 = $conn->prepare("INSERT INTO peserta (nama, no_wa, bulan_pertemuan) VALUES (?, ?, ?)");
-            $stmt2->bind_param("sss", $nama_add, $no_wa_dummy, $bulan_add);
-            $stmt2->execute();
+            $blok_dummy = "";
+            $stmt2 = $conn->prepare("INSERT INTO peserta (nama, no_wa, blok_rumah, bulan_pertemuan) VALUES (?, ?, ?, ?)");
+            $stmt2->bind_param("ssss", $nama_add, $no_wa_dummy, $blok_dummy, $bulan_add);
+            if(!$stmt2->execute()) {
+                error_log("Error Insert Pertemuan: " . $stmt2->error);
+            }
         }
         
         catat_log($conn, "Admin menugaskan $nama_add sebagai tuan rumah bulan $bulan_add");
