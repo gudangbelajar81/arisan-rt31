@@ -1,0 +1,8 @@
+{
+    "name": "avelza/arisan-rt31",
+    "description": "Sistem Pendaftaran Arisan RT 31",
+    "require": {
+        "php": ">=8.0",
+        "ext-mysqli": "*"
+    }
+}
