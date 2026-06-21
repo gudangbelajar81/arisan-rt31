@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendaftaran Arisan RT 31</title>
+    <title>Sistem Arisan RT 31</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#cca300">
+    <link rel="apple-touch-icon" href="logo_m.png">
     <link rel="stylesheet" href="style.css">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
 </head>
 <body>
     <div class="container">

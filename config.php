@@ -28,11 +28,8 @@ if ($conn->connect_error) {
     // Jika gagal, coba tanpa DB Name (Untuk setup awal XAMPP lokal)
     $conn_setup = @new mysqli($host, $user, $pass, "", $port);
     if ($conn_setup->connect_error) {
-        die("<div style='background:#111; color:#ff4444; padding:30px; font-family:sans-serif; text-align:center; border-radius:10px; margin:50px;'>
-                <h2>🚨 SISTEM DATABASE TERPUTUS 🚨</h2>
-                <p><strong>Pesan Server:</strong> " . $conn_setup->connect_error . "</p>
-                <p style='color:#ccc'><strong>Bos Musyafa:</strong> Jika Anda melihat pesan ini di Railway, berarti Anda belum menghubungkan/menyuntikkan Variables Database MySQL ke Aplikasi Web Anda. Silakan ikuti panduan Altair di chat.</p>
-             </div>");
+        header("Location: maintenance.php");
+        exit;
     }
     
     // Buat database otomatis
@@ -53,13 +50,21 @@ $sql_create_table = "CREATE TABLE IF NOT EXISTS peserta (
     tanggal_daftar TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )";
 if (!$conn->query($sql_create_table)) {
-    die("Gagal membuat tabel: " . $conn->error);
+    // Abaikan gagal pembuatan tabel agar tidak memecah layout jika koneksi db aman tapi privilese kurang
 }
 
 // 3. Migrasi Database Aman (Soft-Delete)
-// Tambahkan kolom is_deleted jika belum ada di tabel peserta
 $check_column = $conn->query("SHOW COLUMNS FROM peserta LIKE 'is_deleted'");
 if ($check_column && $check_column->num_rows == 0) {
     $conn->query("ALTER TABLE peserta ADD COLUMN is_deleted TINYINT(1) DEFAULT 0 AFTER blok_rumah");
 }
+
+// 4. Buat Tabel Log Aktivitas (Jejak Rekam Digital)
+$sql_log_table = "CREATE TABLE IF NOT EXISTS log_aktivitas (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    aksi VARCHAR(255) NOT NULL,
+    ip_address VARCHAR(50) NOT NULL,
+    waktu TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+$conn->query($sql_log_table);
 ?>

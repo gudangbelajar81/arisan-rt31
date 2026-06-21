@@ -9,6 +9,14 @@ $is_admin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Peserta Arisan RT 31</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#cca300">
+    <link rel="apple-touch-icon" href="logo_m.png">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'config.php';
+require 'logger.php';
 
 // Cek keamanan akses admin
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
@@ -16,6 +17,7 @@ if (isset($_GET['id'])) {
     $stmt->bind_param("i", $id);
     
     if ($stmt->execute()) {
+        catat_log($conn, "Admin menyembunyikan (Soft-Delete) peserta ID: $id");
         header("Location: peserta.php?pesan=hapus_sukses");
     } else {
         echo "Gagal mengamankan (menyembunyikan) data: " . $conn->error;

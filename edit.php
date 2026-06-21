@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'config.php';
+require 'logger.php';
 
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     die("Akses Ditolak! Anda bukan Admin.");
@@ -22,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssi", $nama, $no_wa, $id);
     
     if ($stmt->execute()) {
+        catat_log($conn, "Admin mengedit profil peserta ID: $id ($nama)");
         $pesan = "<div class='alert success'>✅ Data berhasil diperbarui! <a href='peserta.php'>Kembali ke daftar.</a></div>";
     } else {
         $pesan = "<div class='alert error'>❌ Gagal memperbarui data.</div>";

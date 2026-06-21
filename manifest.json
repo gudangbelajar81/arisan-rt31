@@ -1,0 +1,21 @@
+{
+  "name": "Arisan RT 31",
+  "short_name": "Arisan RT31",
+  "description": "Sistem Pendaftaran Arisan RT 31",
+  "start_url": "index.php",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#cca300",
+  "icons": [
+    {
+      "src": "logo_m.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo_m.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
