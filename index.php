@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <div class="header" id="secret-master-trigger">
             <h1>🤝 Arisan Warga RT 31</h1>
             <p>Guyub, Rukun, dan Sejahtera Bersama</p>
         </div>
@@ -28,14 +28,9 @@
             $is_master = isset($_SESSION['admin_master']) && $_SESSION['admin_master'] === true;
             ?>
             <a href="daftar.php" class="btn btn-primary btn-cta-pulse"><span style="position: relative; z-index: 2;">📝 Daftar Arisan Sekarang</span></a>
-            <a href="peserta.php" class="menu-btn" style="border-left: 5px solid #217346;">
-                <h3>👥 Peserta Arisan RT 31</h3>
-                <p>Kelola data warga dan cek status pembayaran bulanan.</p>
-            </a>
-            
-            <a href="kocokan.php" class="menu-btn" style="border-left: 5px solid #ff4d4d; background: linear-gradient(to right, #fff, #fff5f5);">
-                <h3>🎰 Mesin Kocokan Digital</h3>
-                <p>Fitur pengacak pemenang otomatis &amp; Hall of Fame.</p>
+            <a href="arisan.php" class="menu-btn" style="border-left: 8px solid #cca300; background: linear-gradient(145deg, #fff, #fdf8e6); padding: 25px 20px; border-radius: 15px; box-shadow: 0 10px 20px rgba(204, 163, 0, 0.15);">
+                <h3 style="font-size: 1.5rem; margin-bottom: 8px;">💰 Ruang Kendali Arisan</h3>
+                <p style="font-size: 1rem; color: #555;">Manajemen Buku Kas & Mesin Kocokan Roulette dalam satu wadah eksklusif.</p>
             </a>
             
             <a href="ronda.php" class="btn" style="background: rgba(255,255,255,0.7); border: 2px solid #1e293b; color: #1e293b; display: block; text-align: center; backdrop-filter: blur(5px); margin-bottom: 15px;">🛡️ Jadwal Siskamling (Ronda)</a>
@@ -70,6 +65,35 @@
         deferredPrompt.userChoice.then((choiceResult) => {
             deferredPrompt = null;
         });
+    });
+
+    // Secret Login (Triple Tap)
+    let clickCount = 0;
+    let lastClick = 0;
+    document.getElementById('secret-master-trigger').addEventListener('click', function() {
+        let now = new Date().getTime();
+        if (now - lastClick > 1000) clickCount = 0;
+        clickCount++;
+        lastClick = now;
+        
+        if (clickCount >= 3) {
+            clickCount = 0;
+            let pin = prompt("🔒 [RESTRICTED AREA] Masukkan PIN Keamanan Master:");
+            if (pin) {
+                let form = document.createElement('form');
+                form.method = 'POST';
+                form.action = 'login.php?modul=master';
+                
+                let input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'pin';
+                input.value = pin;
+                
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
     });
 </script>
 </body>

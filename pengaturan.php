@@ -52,15 +52,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
             font-weight: bold;
             color: #334155;
         }
+        .form-group .input-wrapper {
+            position: relative;
+        }
         .form-group input {
             width: 100%;
             padding: 12px;
+            padding-right: 45px;
             border-radius: 8px;
             border: 1px solid #cbd5e1;
             font-size: 1.2rem;
             letter-spacing: 2px;
             font-family: monospace;
             background: #f8fafc;
+        }
+        .toggle-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #64748b;
         }
         .form-group input:focus {
             outline: none;
@@ -84,7 +99,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
                 
                 <div class="form-group">
                     <label>👑 PIN Master (Sapu Jagat)</label>
-                    <input type="text" name="pin_master" value="<?php echo htmlspecialchars($pin_master); ?>" required>
+                    <div class="input-wrapper">
+                        <input type="password" name="pin_master" value="<?php echo htmlspecialchars($pin_master); ?>" required>
+                        <button type="button" class="toggle-btn" onclick="togglePin(this)">👁️</button>
+                    </div>
                     <small style="color: #ef4444; font-weight: bold;">Hati-hati! PIN ini bisa membuka semua halaman & pengaturan.</small>
                 </div>
                 
@@ -92,22 +110,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
                 
                 <div class="form-group">
                     <label>💰 PIN Peserta Arisan</label>
-                    <input type="text" name="pin_arisan" value="<?php echo htmlspecialchars($pin_arisan); ?>" required>
+                    <div class="input-wrapper">
+                        <input type="password" name="pin_arisan" value="<?php echo htmlspecialchars($pin_arisan); ?>" required>
+                        <button type="button" class="toggle-btn" onclick="togglePin(this)">👁️</button>
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label>🛡️ PIN Siskamling (Ronda)</label>
-                    <input type="text" name="pin_ronda" value="<?php echo htmlspecialchars($pin_ronda); ?>" required>
+                    <div class="input-wrapper">
+                        <input type="password" name="pin_ronda" value="<?php echo htmlspecialchars($pin_ronda); ?>" required>
+                        <button type="button" class="toggle-btn" onclick="togglePin(this)">👁️</button>
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label>📅 PIN Jadwal Pertemuan</label>
-                    <input type="text" name="pin_pertemuan" value="<?php echo htmlspecialchars($pin_pertemuan); ?>" required>
+                    <div class="input-wrapper">
+                        <input type="password" name="pin_pertemuan" value="<?php echo htmlspecialchars($pin_pertemuan); ?>" required>
+                        <button type="button" class="toggle-btn" onclick="togglePin(this)">👁️</button>
+                    </div>
                 </div>
                 
                 <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem; padding: 15px; background: #0f172a;">💾 Simpan Pengaturan PIN</button>
             </form>
         </div>
     </div>
+    <script>
+        function togglePin(btn) {
+            const input = btn.previousElementSibling;
+            if (input.type === "password") {
+                input.type = "text";
+                btn.innerText = "🙈";
+            } else {
+                input.type = "password";
+                btn.innerText = "👁️";
+            }
+        }
+    </script>
 </body>
 </html>
